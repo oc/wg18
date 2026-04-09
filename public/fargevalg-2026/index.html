@@ -42,7 +42,7 @@
   }
 
   main{
-    max-width:960px;
+    max-width:980px;
     margin:0 auto;
     padding:72px 56px 140px;
     position:relative;
@@ -99,10 +99,17 @@
   .stack{
     margin-top:56px;
     list-style:none;
-    display:flex;flex-direction:column;gap:24px;
+    display:flex;flex-direction:column;gap:28px;
   }
 
   .card{
+    --c-wall:   #CFCABA;
+    --c-trim:   #EFE9D8;
+    --c-frame:  #2A231B;
+    --c-glass:  #2B3640;
+    --c-roof:   #141014;
+    --c-plinth: #3C342B;
+
     background:var(--bone-deep);
     border:1px solid var(--ink);
     padding:28px 30px 26px;
@@ -119,6 +126,23 @@
   .stack li:nth-child(2) .card{animation-delay:.36s}
   .stack li:nth-child(3) .card{animation-delay:.52s}
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  .card[data-forslag="01"]{
+    --c-wall:  #A6AE8E;
+    --c-trim:  #E2D6BB;
+    --c-frame: #2A231B;
+  }
+  .card[data-forslag="02"]{
+    --c-wall:  #595E52;
+    --c-trim:  #F2EAD6;
+    --c-frame: #2A231B;
+  }
+  .card.tba{
+    --c-wall:  #CFCABA;
+    --c-trim:  #E8E0CB;
+    --c-frame: #6B6157;
+  }
+  .card.tba .facade{opacity:.55}
 
   .card:hover{
     background:#F6F0E0;
@@ -148,8 +172,25 @@
   }
   .card .head .rank b{color:var(--rust);font-weight:500;font-style:normal}
 
-  .row{
+  /* facade svg */
+  .facade-wrap{
     margin-top:26px;
+    border:1px solid var(--ink);
+    background:var(--c-wall);
+    overflow:hidden;
+    position:relative;
+    box-shadow: inset 0 0 0 1px rgba(26,20,17,.08);
+  }
+  .facade{display:block;width:100%;height:auto}
+  .facade .f-wall   { fill: var(--c-wall); }
+  .facade .f-trim   { fill: var(--c-trim); }
+  .facade .f-frame  { fill: var(--c-frame); }
+  .facade .f-glass  { fill: var(--c-glass); }
+  .facade .f-roof   { fill: var(--c-roof); }
+  .facade .f-plinth { fill: var(--c-plinth); }
+
+  .row{
+    margin-top:24px;
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:22px;
@@ -289,6 +330,29 @@
 </head>
 <body>
 
+<!-- reusable window symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="win" viewBox="0 0 60 54" overflow="visible">
+      <!-- lintel above window -->
+      <rect class="f-trim" x="-2" y="-4" width="64" height="4"/>
+      <!-- surround (frame of trim around the glass) -->
+      <rect class="f-trim" x="2" y="2" width="56" height="48"/>
+      <!-- glass -->
+      <rect class="f-glass" x="8" y="6" width="44" height="40"/>
+      <!-- karmer: outer window frame + mullion + transom -->
+      <rect class="f-frame" x="8"    y="6"    width="44" height="1.6"/>
+      <rect class="f-frame" x="8"    y="44.4" width="44" height="1.6"/>
+      <rect class="f-frame" x="8"    y="6"    width="1.6" height="40"/>
+      <rect class="f-frame" x="50.4" y="6"    width="1.6" height="40"/>
+      <rect class="f-frame" x="29.2" y="6"    width="1.6" height="40"/>
+      <rect class="f-frame" x="8"    y="25.2" width="44" height="1.6"/>
+      <!-- sill below window -->
+      <rect class="f-trim" x="-1" y="50" width="62" height="3"/>
+    </symbol>
+  </defs>
+</svg>
+
 <main>
 
   <div class="kicker">WG18 · Welhavensgate 18 · Vår 2026</div>
@@ -310,11 +374,39 @@
   <ol class="stack" id="stack">
 
     <li>
-      <article class="card" data-key="01" data-title="Forslag 01">
+      <article class="card" data-forslag="01" data-key="01" data-title="Forslag 01">
         <div class="head">
           <span>Forslag 01 · NCS</span>
           <span class="rank">Posisjon <b data-pos>01</b></span>
         </div>
+
+        <div class="facade-wrap">
+          <svg class="facade" viewBox="0 0 420 260" preserveAspectRatio="xMidYMid meet">
+            <rect class="f-wall" width="420" height="260"/>
+            <rect class="f-roof" width="420" height="14"/>
+            <rect class="f-trim" y="14" width="420" height="12"/>
+            <use href="#win" x="20"  y="34" width="60" height="54"/>
+            <use href="#win" x="100" y="34" width="60" height="54"/>
+            <use href="#win" x="180" y="34" width="60" height="54"/>
+            <use href="#win" x="260" y="34" width="60" height="54"/>
+            <use href="#win" x="340" y="34" width="60" height="54"/>
+            <rect class="f-trim" y="94" width="420" height="6"/>
+            <use href="#win" x="20"  y="106" width="60" height="54"/>
+            <use href="#win" x="100" y="106" width="60" height="54"/>
+            <use href="#win" x="180" y="106" width="60" height="54"/>
+            <use href="#win" x="260" y="106" width="60" height="54"/>
+            <use href="#win" x="340" y="106" width="60" height="54"/>
+            <rect class="f-trim" y="166" width="420" height="6"/>
+            <use href="#win" x="20"  y="178" width="60" height="54"/>
+            <use href="#win" x="100" y="178" width="60" height="54"/>
+            <use href="#win" x="180" y="178" width="60" height="54"/>
+            <use href="#win" x="260" y="178" width="60" height="54"/>
+            <use href="#win" x="340" y="178" width="60" height="54"/>
+            <rect class="f-trim" y="236" width="420" height="8"/>
+            <rect class="f-plinth" y="244" width="420" height="16"/>
+          </svg>
+        </div>
+
         <div class="row">
           <div class="swatch hovedfarge">
             <span class="role">Hovedfarge</span>
@@ -328,10 +420,11 @@
           </div>
           <div class="swatch karmer">
             <span class="role">Karmer</span>
-            <div class="chip" style="background:#3A434C"></div>
-            <span class="ncs">S 7805-B01G</span>
+            <div class="chip" style="background:#2A231B"></div>
+            <span class="ncs">S 8505-Y20R</span>
           </div>
         </div>
+
         <div class="foot">
           <span class="handle">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
@@ -343,11 +436,39 @@
     </li>
 
     <li>
-      <article class="card" data-key="02" data-title="Forslag 02">
+      <article class="card" data-forslag="02" data-key="02" data-title="Forslag 02">
         <div class="head">
           <span>Forslag 02 · NCS</span>
           <span class="rank">Posisjon <b data-pos>02</b></span>
         </div>
+
+        <div class="facade-wrap">
+          <svg class="facade" viewBox="0 0 420 260" preserveAspectRatio="xMidYMid meet">
+            <rect class="f-wall" width="420" height="260"/>
+            <rect class="f-roof" width="420" height="14"/>
+            <rect class="f-trim" y="14" width="420" height="12"/>
+            <use href="#win" x="20"  y="34" width="60" height="54"/>
+            <use href="#win" x="100" y="34" width="60" height="54"/>
+            <use href="#win" x="180" y="34" width="60" height="54"/>
+            <use href="#win" x="260" y="34" width="60" height="54"/>
+            <use href="#win" x="340" y="34" width="60" height="54"/>
+            <rect class="f-trim" y="94" width="420" height="6"/>
+            <use href="#win" x="20"  y="106" width="60" height="54"/>
+            <use href="#win" x="100" y="106" width="60" height="54"/>
+            <use href="#win" x="180" y="106" width="60" height="54"/>
+            <use href="#win" x="260" y="106" width="60" height="54"/>
+            <use href="#win" x="340" y="106" width="60" height="54"/>
+            <rect class="f-trim" y="166" width="420" height="6"/>
+            <use href="#win" x="20"  y="178" width="60" height="54"/>
+            <use href="#win" x="100" y="178" width="60" height="54"/>
+            <use href="#win" x="180" y="178" width="60" height="54"/>
+            <use href="#win" x="260" y="178" width="60" height="54"/>
+            <use href="#win" x="340" y="178" width="60" height="54"/>
+            <rect class="f-trim" y="236" width="420" height="8"/>
+            <rect class="f-plinth" y="244" width="420" height="16"/>
+          </svg>
+        </div>
+
         <div class="row">
           <div class="swatch hovedfarge">
             <span class="role">Hovedfarge</span>
@@ -365,6 +486,7 @@
             <span class="ncs">S 8505-Y20R</span>
           </div>
         </div>
+
         <div class="foot">
           <span class="handle">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
@@ -376,11 +498,39 @@
     </li>
 
     <li>
-      <article class="card" data-key="03" data-title="Forslag 03">
+      <article class="card tba" data-forslag="03" data-key="03" data-title="Forslag 03">
         <div class="head">
           <span>Forslag 03 · NCS</span>
           <span class="rank">Posisjon <b data-pos>03</b></span>
         </div>
+
+        <div class="facade-wrap">
+          <svg class="facade" viewBox="0 0 420 260" preserveAspectRatio="xMidYMid meet">
+            <rect class="f-wall" width="420" height="260"/>
+            <rect class="f-roof" width="420" height="14"/>
+            <rect class="f-trim" y="14" width="420" height="12"/>
+            <use href="#win" x="20"  y="34" width="60" height="54"/>
+            <use href="#win" x="100" y="34" width="60" height="54"/>
+            <use href="#win" x="180" y="34" width="60" height="54"/>
+            <use href="#win" x="260" y="34" width="60" height="54"/>
+            <use href="#win" x="340" y="34" width="60" height="54"/>
+            <rect class="f-trim" y="94" width="420" height="6"/>
+            <use href="#win" x="20"  y="106" width="60" height="54"/>
+            <use href="#win" x="100" y="106" width="60" height="54"/>
+            <use href="#win" x="180" y="106" width="60" height="54"/>
+            <use href="#win" x="260" y="106" width="60" height="54"/>
+            <use href="#win" x="340" y="106" width="60" height="54"/>
+            <rect class="f-trim" y="166" width="420" height="6"/>
+            <use href="#win" x="20"  y="178" width="60" height="54"/>
+            <use href="#win" x="100" y="178" width="60" height="54"/>
+            <use href="#win" x="180" y="178" width="60" height="54"/>
+            <use href="#win" x="260" y="178" width="60" height="54"/>
+            <use href="#win" x="340" y="178" width="60" height="54"/>
+            <rect class="f-trim" y="236" width="420" height="8"/>
+            <rect class="f-plinth" y="244" width="420" height="16"/>
+          </svg>
+        </div>
+
         <div class="row">
           <div class="swatch hovedfarge tba">
             <span class="role">Hovedfarge</span>
@@ -398,6 +548,7 @@
             <span class="ncs">TBA</span>
           </div>
         </div>
+
         <div class="foot">
           <span class="handle">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
