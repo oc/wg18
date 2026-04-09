@@ -105,10 +105,6 @@
   .card{
     --c-wall:   #CFCABA;
     --c-trim:   #EFE9D8;
-    --c-frame:  #2A231B;
-    --c-glass:  #2B3640;
-    --c-roof:   #141014;
-    --c-plinth: #3C342B;
 
     background:var(--bone-deep);
     border:1px solid var(--ink);
@@ -130,17 +126,14 @@
   .card[data-forslag="01"]{
     --c-wall:  #A6AE8E;
     --c-trim:  #E2D6BB;
-    --c-frame: #2A231B;
   }
   .card[data-forslag="02"]{
     --c-wall:  #595E52;
     --c-trim:  #F2EAD6;
-    --c-frame: #2A231B;
   }
   .card.tba{
     --c-wall:  #CFCABA;
     --c-trim:  #E8E0CB;
-    --c-frame: #6B6157;
   }
   .card.tba .facade{opacity:.55}
 
@@ -182,18 +175,25 @@
     box-shadow: inset 0 0 0 1px rgba(26,20,17,.08);
   }
   .facade{display:block;width:100%;height:auto}
+  .facade-wrap.photo{aspect-ratio:800/540}
+  .facade-wrap.photo img{
+    display:block;width:100%;height:100%;
+    object-fit:cover;object-position:center 32%;
+    filter:saturate(1.02) contrast(1.02);
+  }
   .facade .f-wall   { fill: var(--c-wall); }
   .facade .f-trim   { fill: var(--c-trim); }
-  .facade .f-frame  { fill: var(--c-frame); }
-  .facade .f-glass  { fill: var(--c-glass); }
-  .facade .f-roof   { fill: var(--c-roof); }
-  .facade .f-plinth { fill: var(--c-plinth); }
+  .facade .f-frame  { fill: #1F1A15; }
+  .facade .f-glass  { fill: #2B3640; }
+  .facade .f-shop   { fill: #C8CEC8; }
+  .facade .f-roof   { fill: #14110E; }
+  .facade .f-plinth { fill: #2B2720; }
 
   .row{
     margin-top:24px;
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
+    grid-template-columns:1fr 1fr;
+    gap:26px;
   }
   @media (max-width:640px){.row{grid-template-columns:1fr;gap:26px}}
 
@@ -205,7 +205,7 @@
   }
   .swatch .chip{
     border:1px solid var(--ink);
-    aspect-ratio:4/3;
+    aspect-ratio:5/2;
     transition:transform .6s cubic-bezier(.2,.8,.2,1);
   }
   .card:hover .swatch .chip{transform:translate(-2px,-2px)}
@@ -330,26 +330,174 @@
 </head>
 <body>
 
-<!-- reusable window symbol -->
+<!-- reusable symbols -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <symbol id="win" viewBox="0 0 60 54" overflow="visible">
-      <!-- lintel above window -->
-      <rect class="f-trim" x="-2" y="-4" width="64" height="4"/>
-      <!-- surround (frame of trim around the glass) -->
-      <rect class="f-trim" x="2" y="2" width="56" height="48"/>
+
+    <!-- Window symbol: decorative cap, surround, 2x3 pane karmer, sill -->
+    <symbol id="win" viewBox="0 0 100 108">
+      <!-- decorative cap/pediment above window (stacked mouldings) -->
+      <rect class="f-trim" x="6"  y="0"  width="88" height="3"/>
+      <rect class="f-trim" x="10" y="3"  width="80" height="3"/>
+      <rect class="f-trim" x="14" y="6"  width="72" height="3"/>
+      <!-- surround frame -->
+      <rect class="f-trim" x="18" y="9"  width="64" height="84"/>
       <!-- glass -->
-      <rect class="f-glass" x="8" y="6" width="44" height="40"/>
-      <!-- karmer: outer window frame + mullion + transom -->
-      <rect class="f-frame" x="8"    y="6"    width="44" height="1.6"/>
-      <rect class="f-frame" x="8"    y="44.4" width="44" height="1.6"/>
-      <rect class="f-frame" x="8"    y="6"    width="1.6" height="40"/>
-      <rect class="f-frame" x="50.4" y="6"    width="1.6" height="40"/>
-      <rect class="f-frame" x="29.2" y="6"    width="1.6" height="40"/>
-      <rect class="f-frame" x="8"    y="25.2" width="44" height="1.6"/>
-      <!-- sill below window -->
-      <rect class="f-trim" x="-1" y="50" width="62" height="3"/>
+      <rect class="f-glass" x="22" y="13" width="56" height="76"/>
+      <!-- karmer: outer rim -->
+      <rect class="f-frame" x="22"    y="13"    width="56"  height="1.6"/>
+      <rect class="f-frame" x="22"    y="87.4"  width="56"  height="1.6"/>
+      <rect class="f-frame" x="22"    y="13"    width="1.6" height="76"/>
+      <rect class="f-frame" x="76.4"  y="13"    width="1.6" height="76"/>
+      <!-- central vertical mullion -->
+      <rect class="f-frame" x="49.2"  y="13"    width="1.6" height="76"/>
+      <!-- two transoms (3-row pane grid) -->
+      <rect class="f-frame" x="22"    y="38.33" width="56"  height="1.6"/>
+      <rect class="f-frame" x="22"    y="63.67" width="56"  height="1.6"/>
+      <!-- sill -->
+      <rect class="f-trim" x="14" y="93"  width="72" height="4"/>
+      <rect class="f-trim" x="18" y="97"  width="64" height="3"/>
     </symbol>
+
+    <!-- Full facade elevation, loosely modelled on the WG18 architect drawings -->
+    <symbol id="facade" viewBox="0 0 800 540">
+      <!-- wall base -->
+      <rect class="f-wall" width="800" height="540"/>
+
+      <!-- chimneys poking above the mansard -->
+      <rect class="f-roof" x="150" y="0"  width="36" height="18"/>
+      <rect class="f-roof" x="380" y="0"  width="36" height="18"/>
+      <rect class="f-roof" x="610" y="0"  width="36" height="18"/>
+
+      <!-- mansard -->
+      <rect class="f-roof" x="0" y="18" width="800" height="34"/>
+
+      <!-- attic dentil frieze (trim band + dark dentil marks) -->
+      <rect class="f-trim" x="0" y="52" width="800" height="18"/>
+      <g>
+        <rect class="f-frame" x="14"  y="55" width="10" height="12"/>
+        <rect class="f-frame" x="42"  y="55" width="10" height="12"/>
+        <rect class="f-frame" x="70"  y="55" width="10" height="12"/>
+        <rect class="f-frame" x="98"  y="55" width="10" height="12"/>
+        <rect class="f-frame" x="126" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="154" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="182" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="210" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="238" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="266" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="294" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="322" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="350" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="378" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="406" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="434" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="462" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="490" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="518" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="546" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="574" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="602" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="630" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="658" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="686" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="714" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="742" y="55" width="10" height="12"/>
+        <rect class="f-frame" x="770" y="55" width="10" height="12"/>
+      </g>
+
+      <!-- main cornice (wide trim band) -->
+      <rect class="f-trim" x="0" y="70" width="800" height="20"/>
+      <!-- thin shadow line below cornice -->
+      <rect class="f-frame" x="0" y="90" width="800" height="1" opacity="0.18"/>
+
+      <!-- FLOOR 3 (top): 7 windows -->
+      <use href="#win" x="50"  y="96" width="100" height="108"/>
+      <use href="#win" x="150" y="96" width="100" height="108"/>
+      <use href="#win" x="250" y="96" width="100" height="108"/>
+      <use href="#win" x="350" y="96" width="100" height="108"/>
+      <use href="#win" x="450" y="96" width="100" height="108"/>
+      <use href="#win" x="550" y="96" width="100" height="108"/>
+      <use href="#win" x="650" y="96" width="100" height="108"/>
+
+      <!-- thin string course -->
+      <rect class="f-trim" x="0" y="210" width="800" height="6"/>
+
+      <!-- FLOOR 2 -->
+      <use href="#win" x="50"  y="222" width="100" height="108"/>
+      <use href="#win" x="150" y="222" width="100" height="108"/>
+      <use href="#win" x="250" y="222" width="100" height="108"/>
+      <use href="#win" x="350" y="222" width="100" height="108"/>
+      <use href="#win" x="450" y="222" width="100" height="108"/>
+      <use href="#win" x="550" y="222" width="100" height="108"/>
+      <use href="#win" x="650" y="222" width="100" height="108"/>
+
+      <!-- thin string course -->
+      <rect class="f-trim" x="0" y="336" width="800" height="6"/>
+
+      <!-- FLOOR 1 -->
+      <use href="#win" x="50"  y="348" width="100" height="108"/>
+      <use href="#win" x="150" y="348" width="100" height="108"/>
+      <use href="#win" x="250" y="348" width="100" height="108"/>
+      <use href="#win" x="350" y="348" width="100" height="108"/>
+      <use href="#win" x="450" y="348" width="100" height="108"/>
+      <use href="#win" x="550" y="348" width="100" height="108"/>
+      <use href="#win" x="650" y="348" width="100" height="108"/>
+
+      <!-- thick belt course above ground floor -->
+      <rect class="f-trim" x="0" y="462" width="800" height="16"/>
+
+      <!-- GROUND FLOOR — lighter, trim color background -->
+      <rect class="f-trim" x="0" y="478" width="800" height="46"/>
+
+      <!-- ground floor residential windows (bays 1-5): small, dark -->
+      <g>
+        <!-- bay 1 -->
+        <rect class="f-frame" x="66"  y="488" width="68" height="32"/>
+        <rect class="f-glass" x="70"  y="492" width="60" height="24"/>
+        <rect class="f-frame" x="99.2" y="492" width="1.6" height="24"/>
+        <!-- bay 2 -->
+        <rect class="f-frame" x="166" y="488" width="68" height="32"/>
+        <rect class="f-glass" x="170" y="492" width="60" height="24"/>
+        <rect class="f-frame" x="199.2" y="492" width="1.6" height="24"/>
+        <!-- bay 3 -->
+        <rect class="f-frame" x="266" y="488" width="68" height="32"/>
+        <rect class="f-glass" x="270" y="492" width="60" height="24"/>
+        <rect class="f-frame" x="299.2" y="492" width="1.6" height="24"/>
+        <!-- bay 4 -->
+        <rect class="f-frame" x="366" y="488" width="68" height="32"/>
+        <rect class="f-glass" x="370" y="492" width="60" height="24"/>
+        <rect class="f-frame" x="399.2" y="492" width="1.6" height="24"/>
+        <!-- bay 5 -->
+        <rect class="f-frame" x="466" y="488" width="68" height="32"/>
+        <rect class="f-glass" x="470" y="492" width="60" height="24"/>
+        <rect class="f-frame" x="499.2" y="492" width="1.6" height="24"/>
+      </g>
+
+      <!-- ENTRY DOOR (bay 6) — ornate, dark, extends upward slightly -->
+      <g>
+        <!-- door surround/frame -->
+        <rect class="f-trim"  x="562" y="470" width="76" height="56"/>
+        <!-- door slab -->
+        <rect class="f-frame" x="568" y="476" width="64" height="48"/>
+        <!-- door panels -->
+        <rect class="f-trim"  x="574" y="484" width="22" height="16" opacity="0.25"/>
+        <rect class="f-trim"  x="604" y="484" width="22" height="16" opacity="0.25"/>
+        <rect class="f-trim"  x="574" y="504" width="22" height="14" opacity="0.18"/>
+        <rect class="f-trim"  x="604" y="504" width="22" height="14" opacity="0.18"/>
+      </g>
+
+      <!-- SHOP FRONT (bay 7) — larger, lighter glass -->
+      <g>
+        <rect class="f-frame" x="658" y="484" width="104" height="42"/>
+        <rect class="f-shop"  x="662" y="488" width="96"  height="34"/>
+        <rect class="f-frame" x="708.2" y="488" width="1.6" height="34"/>
+        <rect class="f-frame" x="662" y="504" width="96" height="1.2"/>
+      </g>
+
+      <!-- plinth base -->
+      <rect class="f-plinth" x="0" y="524" width="800" height="16"/>
+    </symbol>
+
   </defs>
 </svg>
 
@@ -360,7 +508,7 @@
   <h1>Fargevalg</h1>
 
   <p class="lede">
-    Tre forslag til ny fasadefarge for bygården. Studer prøvene,
+    Tre forslag til ny fasadefarge for bygården. Studer fasadene,
     <em>dra kortene i ønsket rekkefølge</em> — øverst er din favoritt —
     og send inn stemmen din til styret.
   </p>
@@ -380,31 +528,8 @@
           <span class="rank">Posisjon <b data-pos>01</b></span>
         </div>
 
-        <div class="facade-wrap">
-          <svg class="facade" viewBox="0 0 420 260" preserveAspectRatio="xMidYMid meet">
-            <rect class="f-wall" width="420" height="260"/>
-            <rect class="f-roof" width="420" height="14"/>
-            <rect class="f-trim" y="14" width="420" height="12"/>
-            <use href="#win" x="20"  y="34" width="60" height="54"/>
-            <use href="#win" x="100" y="34" width="60" height="54"/>
-            <use href="#win" x="180" y="34" width="60" height="54"/>
-            <use href="#win" x="260" y="34" width="60" height="54"/>
-            <use href="#win" x="340" y="34" width="60" height="54"/>
-            <rect class="f-trim" y="94" width="420" height="6"/>
-            <use href="#win" x="20"  y="106" width="60" height="54"/>
-            <use href="#win" x="100" y="106" width="60" height="54"/>
-            <use href="#win" x="180" y="106" width="60" height="54"/>
-            <use href="#win" x="260" y="106" width="60" height="54"/>
-            <use href="#win" x="340" y="106" width="60" height="54"/>
-            <rect class="f-trim" y="166" width="420" height="6"/>
-            <use href="#win" x="20"  y="178" width="60" height="54"/>
-            <use href="#win" x="100" y="178" width="60" height="54"/>
-            <use href="#win" x="180" y="178" width="60" height="54"/>
-            <use href="#win" x="260" y="178" width="60" height="54"/>
-            <use href="#win" x="340" y="178" width="60" height="54"/>
-            <rect class="f-trim" y="236" width="420" height="8"/>
-            <rect class="f-plinth" y="244" width="420" height="16"/>
-          </svg>
+        <div class="facade-wrap photo">
+          <img src="forslag-01.jpg" alt="Welhavensgate 18 i sagegrønn fasadefarge — Forslag 01" loading="lazy">
         </div>
 
         <div class="row">
@@ -417,11 +542,6 @@
             <span class="role">Omramninger / detaljer</span>
             <div class="chip" style="background:#E2D6BB"></div>
             <span class="ncs">S 1505-Y30R</span>
-          </div>
-          <div class="swatch karmer">
-            <span class="role">Karmer</span>
-            <div class="chip" style="background:#2A231B"></div>
-            <span class="ncs">S 8505-Y20R</span>
           </div>
         </div>
 
@@ -443,29 +563,8 @@
         </div>
 
         <div class="facade-wrap">
-          <svg class="facade" viewBox="0 0 420 260" preserveAspectRatio="xMidYMid meet">
-            <rect class="f-wall" width="420" height="260"/>
-            <rect class="f-roof" width="420" height="14"/>
-            <rect class="f-trim" y="14" width="420" height="12"/>
-            <use href="#win" x="20"  y="34" width="60" height="54"/>
-            <use href="#win" x="100" y="34" width="60" height="54"/>
-            <use href="#win" x="180" y="34" width="60" height="54"/>
-            <use href="#win" x="260" y="34" width="60" height="54"/>
-            <use href="#win" x="340" y="34" width="60" height="54"/>
-            <rect class="f-trim" y="94" width="420" height="6"/>
-            <use href="#win" x="20"  y="106" width="60" height="54"/>
-            <use href="#win" x="100" y="106" width="60" height="54"/>
-            <use href="#win" x="180" y="106" width="60" height="54"/>
-            <use href="#win" x="260" y="106" width="60" height="54"/>
-            <use href="#win" x="340" y="106" width="60" height="54"/>
-            <rect class="f-trim" y="166" width="420" height="6"/>
-            <use href="#win" x="20"  y="178" width="60" height="54"/>
-            <use href="#win" x="100" y="178" width="60" height="54"/>
-            <use href="#win" x="180" y="178" width="60" height="54"/>
-            <use href="#win" x="260" y="178" width="60" height="54"/>
-            <use href="#win" x="340" y="178" width="60" height="54"/>
-            <rect class="f-trim" y="236" width="420" height="8"/>
-            <rect class="f-plinth" y="244" width="420" height="16"/>
+          <svg class="facade" viewBox="0 0 800 540" preserveAspectRatio="xMidYMid meet">
+            <use href="#facade" width="800" height="540"/>
           </svg>
         </div>
 
@@ -479,11 +578,6 @@
             <span class="role">Omramninger / detaljer</span>
             <div class="chip" style="background:#F2EAD6"></div>
             <span class="ncs">S 0505-Y20R</span>
-          </div>
-          <div class="swatch karmer">
-            <span class="role">Karmer</span>
-            <div class="chip" style="background:#2A231B"></div>
-            <span class="ncs">S 8505-Y20R</span>
           </div>
         </div>
 
@@ -505,29 +599,8 @@
         </div>
 
         <div class="facade-wrap">
-          <svg class="facade" viewBox="0 0 420 260" preserveAspectRatio="xMidYMid meet">
-            <rect class="f-wall" width="420" height="260"/>
-            <rect class="f-roof" width="420" height="14"/>
-            <rect class="f-trim" y="14" width="420" height="12"/>
-            <use href="#win" x="20"  y="34" width="60" height="54"/>
-            <use href="#win" x="100" y="34" width="60" height="54"/>
-            <use href="#win" x="180" y="34" width="60" height="54"/>
-            <use href="#win" x="260" y="34" width="60" height="54"/>
-            <use href="#win" x="340" y="34" width="60" height="54"/>
-            <rect class="f-trim" y="94" width="420" height="6"/>
-            <use href="#win" x="20"  y="106" width="60" height="54"/>
-            <use href="#win" x="100" y="106" width="60" height="54"/>
-            <use href="#win" x="180" y="106" width="60" height="54"/>
-            <use href="#win" x="260" y="106" width="60" height="54"/>
-            <use href="#win" x="340" y="106" width="60" height="54"/>
-            <rect class="f-trim" y="166" width="420" height="6"/>
-            <use href="#win" x="20"  y="178" width="60" height="54"/>
-            <use href="#win" x="100" y="178" width="60" height="54"/>
-            <use href="#win" x="180" y="178" width="60" height="54"/>
-            <use href="#win" x="260" y="178" width="60" height="54"/>
-            <use href="#win" x="340" y="178" width="60" height="54"/>
-            <rect class="f-trim" y="236" width="420" height="8"/>
-            <rect class="f-plinth" y="244" width="420" height="16"/>
+          <svg class="facade" viewBox="0 0 800 540" preserveAspectRatio="xMidYMid meet">
+            <use href="#facade" width="800" height="540"/>
           </svg>
         </div>
 
@@ -539,11 +612,6 @@
           </div>
           <div class="swatch omramninger tba">
             <span class="role">Omramninger / detaljer</span>
-            <div class="chip"></div>
-            <span class="ncs">TBA</span>
-          </div>
-          <div class="swatch karmer tba">
-            <span class="role">Karmer</span>
             <div class="chip"></div>
             <span class="ncs">TBA</span>
           </div>
