@@ -316,6 +316,9 @@
   }
   button.send:active{transform:translate(0,0);box-shadow:0 0 0 var(--ink)}
   button.send svg{display:block}
+  button.send.copy{background:transparent;color:var(--ink);border-color:var(--ink)}
+  button.send.copy:hover{background:var(--ink);color:var(--bone)}
+  button.send.copied{background:var(--rust);border-color:var(--rust);color:var(--bone)}
 
   footer{
     margin-top:96px;
@@ -646,6 +649,9 @@
         <p class="summary">
           Din rangering: <b id="order-line">Forslag 01 → Forslag 02 → Forslag 03</b>
         </p>
+        <button class="send copy" type="button" id="copy-btn">
+          Kopier til utklippstavle
+        </button>
         <button class="send" type="submit">
           Avgi stemme
           <svg width="22" height="10" viewBox="0 0 22 10" fill="none">
@@ -695,16 +701,8 @@
 
   refresh();
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  const buildEmail = () => {
     const email = emailInput.value.trim();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      emailInput.focus();
-      emailInput.style.color = 'var(--rust)';
-      setTimeout(()=> emailInput.style.color = '', 1200);
-      return;
-    }
-
     const order = currentOrder();
     const subject = "Fargevalg WG18 — min rangering";
     const lines = [
@@ -718,14 +716,43 @@
       "",
       "Vennlig hilsen,",
     ];
-    const body = lines.join("\n");
+    return { email, subject, body: lines.join("\n") };
+  };
 
-    const href = `mailto:${encodeURIComponent(email)}`
+  const validateEmail = () => {
+    const email = emailInput.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      emailInput.focus();
+      emailInput.style.color = 'var(--rust)';
+      setTimeout(()=> emailInput.style.color = '', 1200);
+      return false;
+    }
+    return true;
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!validateEmail()) return;
+    const { email, subject, body } = buildEmail();
+    window.location.href = `mailto:${encodeURIComponent(email)}`
       + `?cc=${encodeURIComponent('styret.wg18@gmail.com')}`
       + `&subject=${encodeURIComponent(subject)}`
       + `&body=${encodeURIComponent(body)}`;
+  });
 
-    window.location.href = href;
+  document.getElementById('copy-btn').addEventListener('click', () => {
+    if (!validateEmail()) return;
+    const { subject, body } = buildEmail();
+    const text = `Til: styret.wg18@gmail.com\nEmne: ${subject}\n\n${body}`;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = 'Kopiert!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Kopier til utklippstavle';
+        btn.classList.remove('copied');
+      }, 2400);
+    });
   });
 </script>
 </body>
