@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Takoverlys · Tilbudsforespørsel — WG18</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bone:      #F2ECDE;
+    --bone-deep: #E8E0CB;
+    --ink:       #1A1411;
+    --ink-soft:  #5C4F45;
+    --rust:      #B34118;
+    --rule:      rgba(26,20,17,.15);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bone);color:var(--ink);-webkit-font-smoothing:antialiased}
+  body{
+    font-family:"Fraunces",Georgia,serif;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.06  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/></svg>");
+    mix-blend-mode:multiply;opacity:.4;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:99;
+    background:radial-gradient(120% 80% at 50% 0%, transparent 55%, rgba(26,20,17,.16) 100%);
+  }
+
+  main{
+    max-width:980px;
+    margin:0 auto;
+    padding:72px 56px 140px;
+    position:relative;
+    z-index:1;
+  }
+  @media (max-width:760px){
+    main{padding:48px 24px 100px}
+  }
+
+  .kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;align-items:center;gap:14px;
+  }
+  .kicker::before{
+    content:"";width:32px;height:1px;background:var(--ink);display:inline-block;
+  }
+
+  h1{
+    margin-top:32px;
+    font-weight:300;
+    font-variation-settings:"opsz" 144, "SOFT" 50;
+    font-size:clamp(72px, 13vw, 188px);
+    line-height:.84;
+    letter-spacing:-.045em;
+  }
+  h1 em{font-style:italic;color:var(--rust);font-weight:300}
+
+  .lede{
+    margin-top:38px;
+    max-width:620px;
+    font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:19px;line-height:1.55;
+    color:var(--ink-soft);
+  }
+  .lede em{font-style:italic;color:var(--ink)}
+
+  .meta{
+    margin-top:44px;
+    display:flex;flex-wrap:wrap;gap:28px 44px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    padding:20px 0;
+  }
+  .meta span b{display:block;color:var(--ink);font-weight:500;margin-top:6px;letter-spacing:.12em;font-size:12px}
+
+  /* scope items */
+  .scope{
+    margin-top:72px;
+    display:flex;flex-direction:column;gap:32px;
+  }
+
+  .item{
+    background:var(--bone-deep);
+    border:1px solid var(--ink);
+    padding:32px 34px;
+    box-shadow: 10px 12px 0 -1px rgba(26,20,17,.12);
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:40px;
+    opacity:0;transform:translateY(18px);
+    animation:rise 1.1s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .item:nth-of-type(1){animation-delay:.15s}
+  .item:nth-of-type(2){animation-delay:.3s}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  @media (max-width:760px){.item{grid-template-columns:1fr;gap:28px;padding:26px 24px}}
+
+  .item .head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--ink);
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);
+    grid-column:1 / -1;
+  }
+  .item .head .tag{
+    font-family:"Fraunces",serif;font-style:italic;font-weight:400;
+    font-variation-settings:"opsz" 14;
+    font-size:14px;color:var(--ink);letter-spacing:0;text-transform:none;
+  }
+  .item .head .tag.opt b{color:var(--rust);font-weight:500;font-style:normal}
+
+  .item h2{
+    font-weight:300;
+    font-variation-settings:"opsz" 144, "SOFT" 50;
+    font-size:clamp(44px, 6vw, 72px);
+    line-height:.9;
+    letter-spacing:-.02em;
+  }
+  .item h2 em{font-style:italic;font-weight:300;color:var(--rust)}
+
+  .desc{
+    font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:16px;line-height:1.55;
+    color:var(--ink-soft);
+    max-width:440px;
+    margin-top:16px;
+  }
+
+  .dims{
+    display:flex;flex-direction:column;gap:14px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-soft);
+    align-self:start;
+  }
+  .dims .row{
+    display:flex;justify-content:space-between;gap:18px;
+    padding:10px 0;
+    border-bottom:1px dashed var(--rule);
+  }
+  .dims .row b{
+    color:var(--ink);font-weight:500;
+    font-family:"Fraunces",serif;font-style:italic;
+    font-size:18px;letter-spacing:0;text-transform:none;
+  }
+  .dims .row.total{border-bottom:none;border-top:1px solid var(--ink);margin-top:6px;padding-top:14px}
+  .dims .row.total b{color:var(--rust)}
+
+  /* drawings + photo */
+  .drawings{
+    margin-top:72px;
+    display:flex;flex-direction:column;gap:36px;
+  }
+  .drawings h2{
+    font-weight:300;
+    font-variation-settings:"opsz" 144, "SOFT" 50;
+    font-size:clamp(44px, 6vw, 72px);
+    line-height:.9;
+    letter-spacing:-.02em;
+  }
+  .drawings h2 em{font-style:italic;font-weight:300;color:var(--rust)}
+
+  .fig{
+    background:var(--bone-deep);
+    border:1px solid var(--ink);
+    box-shadow: 10px 12px 0 -1px rgba(26,20,17,.12);
+    overflow:hidden;
+  }
+  .fig img{
+    display:block;width:100%;height:auto;
+  }
+  .fig.photo img{
+    aspect-ratio:3/4;
+    object-fit:cover;
+    object-position:center 30%;
+    max-height:600px;
+  }
+  .fig figcaption{
+    padding:18px 24px;
+    border-top:1px solid var(--ink);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .fig figcaption a{
+    color:var(--ink);text-decoration:none;
+    border:1px solid var(--ink);
+    padding:8px 16px;
+    transition:background .2s, color .2s;
+  }
+  .fig figcaption a:hover{background:var(--ink);color:var(--bone)}
+
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:32px;
+  }
+  @media (max-width:760px){.grid-2{grid-template-columns:1fr}}
+
+  /* bid form */
+  .bid{
+    margin-top:96px;
+    border-top:1px solid var(--ink);
+    padding-top:44px;
+    display:grid;
+    grid-template-columns:1fr 1.3fr;
+    gap:48px;
+    align-items:end;
+  }
+  @media (max-width:760px){.bid{grid-template-columns:1fr;gap:32px}}
+
+  .bid .head{
+    font-weight:300;
+    font-variation-settings:"opsz" 144;
+    font-size:clamp(42px, 6vw, 72px);
+    line-height:.92;letter-spacing:-.02em;
+  }
+  .bid .head em{font-style:italic;color:var(--rust)}
+  .bid .head small{
+    display:block;margin-top:14px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);
+    font-style:normal;
+  }
+
+  .form{display:flex;flex-direction:column;gap:24px}
+  .field{
+    display:flex;flex-direction:column;gap:8px;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:10px;
+  }
+  .field label{
+    font-family:"JetBrains Mono",monospace;font-size:10px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);
+  }
+  .field input, .field textarea{
+    background:transparent;border:none;outline:none;resize:vertical;
+    font-family:"Fraunces",serif;font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:20px;color:var(--ink);
+    padding:4px 0;
+  }
+  .field textarea{min-height:80px;font-size:17px;line-height:1.45}
+  .field input::placeholder,.field textarea::placeholder{color:rgba(26,20,17,.3);font-style:italic}
+
+  .checks{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+  .check{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:10px 0;
+    border-bottom:1px dashed var(--rule);
+    cursor:pointer;
+  }
+  .check input{appearance:none;width:16px;height:16px;border:1px solid var(--ink);background:transparent;margin-top:2px;cursor:pointer;flex-shrink:0;position:relative}
+  .check input:checked{background:var(--ink)}
+  .check input:checked::after{content:"";position:absolute;inset:3px;background:var(--bone)}
+  .check .txt{
+    font-family:"Fraunces",serif;font-weight:400;
+    font-variation-settings:"opsz" 14;
+    font-size:17px;color:var(--ink);
+  }
+  .check .txt small{
+    display:block;margin-top:2px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);
+  }
+
+  .actions{display:flex;align-items:center;justify-content:flex-end;gap:20px;flex-wrap:wrap;margin-top:8px}
+
+  button.send{
+    background:var(--ink);color:var(--bone);
+    border:1px solid var(--ink);
+    padding:22px 32px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    cursor:pointer;
+    display:inline-flex;align-items:center;gap:18px;
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  button.send:hover{
+    background:var(--rust);border-color:var(--rust);
+    transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);
+  }
+  button.send:active{transform:translate(0,0);box-shadow:0 0 0 var(--ink)}
+  button.send svg{display:block}
+
+  footer{
+    margin-top:96px;
+    padding-top:24px;
+    border-top:1px solid var(--rule);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <div class="kicker">WG18 · Welhavensgate 18 · Tilbudsforespørsel</div>
+
+  <h1>Tak<em>overlys.</em></h1>
+
+  <p class="lede">
+    Welhavensgate 18 søker tilbud på <em>nye takoverlys</em> langs hele mønet,
+    samt et opsjonstilbud på <em>vindusrekker</em> på begge sider av taket.
+    Arbeidet gjelder loftsetasjen og skal utføres som en del av en større
+    rehabilitering av bygården.
+  </p>
+
+  <div class="meta">
+    <span>Adresse<b>Welhavensgate 18, Oslo</b></span>
+    <span>Oppdragsgiver<b>Styret, WG18</b></span>
+    <span>Tilbudsfrist<b>Etter avtale</b></span>
+    <span>Befaring<b>Etter avtale</b></span>
+  </div>
+
+  <!-- SCOPE -->
+  <section class="scope">
+
+    <article class="item">
+      <div class="head">
+        <span>Post 01 · Takoverlys</span>
+        <span class="tag">Hovedpost</span>
+      </div>
+
+      <div>
+        <h2>Over<em>lys</em></h2>
+        <p class="desc">
+          Gjennomgående overlys montert langs mønet i hele bygningens lengde.
+          Skal gi dagslys til loftsetasjen og være tett, isolerende og enkelt
+          å vedlikeholde.
+        </p>
+      </div>
+
+      <div class="dims">
+        <div class="row"><span>Lengde</span><b>20 000 mm</b></div>
+        <div class="row"><span>Bredde</span><b>600 mm</b></div>
+        <div class="row"><span>Antall</span><b>1 stk</b></div>
+        <div class="row total"><span>Glassareal</span><b>≈ 12 m²</b></div>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="head">
+        <span>Post 02 · Vindusrekker</span>
+        <span class="tag opt"><b>Opsjon</b> — pris oppgis separat</span>
+      </div>
+
+      <div>
+        <h2>Vindus<em>rekker</em></h2>
+        <p class="desc">
+          Gjennomgående vindusrekker på begge sider av taket, med ett vertikalt
+          (flatt) segment og ett segment langs takets skråning. Gir lys og
+          utsyn i hele loftsetasjens lengde.
+        </p>
+      </div>
+
+      <div class="dims">
+        <div class="row"><span>Lengde (pr. side)</span><b>20 000 mm</b></div>
+        <div class="row"><span>Flatt segment</span><b>≈ 600 mm</b></div>
+        <div class="row"><span>Skrått segment</span><b>≈ 600 mm</b></div>
+        <div class="row"><span>Antall sider</span><b>2 stk</b></div>
+        <div class="row total"><span>Glassareal, totalt</span><b>≈ 48 m²</b></div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- DRAWINGS + PHOTO -->
+  <section class="drawings">
+    <h2>Tegninger <em>&amp; foto</em></h2>
+
+    <figure class="fig photo">
+      <img src="bilde-vinduer-web.jpg" alt="Foto av eksisterende overlys og vindusrekker på taket, WG18" loading="lazy">
+      <figcaption>
+        <span>Eksisterende overlys og vindusrekker · Foto, mars 2026</span>
+      </figcaption>
+    </figure>
+
+    <div class="grid-2">
+      <figure class="fig">
+        <img src="tverrsnitt-web.jpg" alt="Tverrsnitt av bygningen med tak, snitt AA og BB — originaltegning 1987" loading="lazy">
+        <figcaption>
+          <span>Tverrsnitt · A. L. Høyer, 1987</span>
+          <a href="tverrsnitt.pdf" download>Last ned PDF</a>
+        </figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="taktegning-web.jpg" alt="Takplan med overlys og vinduer — originaltegning 1987" loading="lazy">
+        <figcaption>
+          <span>Takplan · A. L. Høyer, 1987</span>
+          <a href="taktegning.pdf" download>Last ned PDF</a>
+        </figcaption>
+      </figure>
+    </div>
+
+    <figure class="fig" style="max-width:600px">
+      <figcaption>
+        <span>Fasadetegning · Original</span>
+        <a href="fasadetegning.pdf" download>Last ned PDF</a>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- BID FORM -->
+  <section class="bid">
+    <div class="head">
+      Send<br><em>tilbud.</em>
+      <small>Styret svarer innen få dager</small>
+    </div>
+
+    <form class="form" id="form" novalidate>
+      <div class="field">
+        <label for="company">Firma</label>
+        <input id="company" name="company" type="text" required placeholder="Firmanavn AS" autocomplete="organization">
+      </div>
+
+      <div class="field">
+        <label for="contact">Kontaktperson</label>
+        <input id="contact" name="contact" type="text" required placeholder="Navn Navnesen" autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="email">E-post</label>
+        <input id="email" name="email" type="email" required placeholder="navn@firma.no" autocomplete="email">
+      </div>
+
+      <div class="field">
+        <label for="phone">Telefon</label>
+        <input id="phone" name="phone" type="tel" placeholder="+47 ..." autocomplete="tel">
+      </div>
+
+      <div class="field">
+        <label>Tilbudet omfatter</label>
+        <div class="checks">
+          <label class="check">
+            <input type="checkbox" id="opt-overlys" checked>
+            <span class="txt">Post 01 · Takoverlys<small>20 m × 600 mm — hovedpost</small></span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="opt-vindusrekker">
+            <span class="txt">Post 02 · Vindusrekker<small>2 × 20 m — opsjon</small></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="message">Merknader</label>
+        <textarea id="message" name="message" placeholder="Leveringstid, forbehold, ønsket befaring, osv."></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="send" type="submit">
+          Send tilbud
+          <svg width="22" height="10" viewBox="0 0 22 10" fill="none">
+            <path d="M0 5 H20 M15 1 L20 5 L15 9" stroke="currentColor" stroke-width="1.4" fill="none"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <footer>
+    <span>WG18 · Welhavensgate 18</span>
+    <span>Tilbudsforespørsel · Takoverlys</span>
+  </footer>
+
+</main>
+
+<script>
+  const form = document.getElementById('form');
+  const $ = (id) => document.getElementById(id);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const company = $('company').value.trim();
+    const contact = $('contact').value.trim();
+    const email   = $('email').value.trim();
+    const phone   = $('phone').value.trim();
+    const msg     = $('message').value.trim();
+    const overlys = $('opt-overlys').checked;
+    const vindus  = $('opt-vindusrekker').checked;
+
+    if (!company || !contact || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      [company ? null : $('company'),
+       contact ? null : $('contact'),
+       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? null : $('email')]
+        .filter(Boolean)[0]?.focus();
+      return;
+    }
+
+    const subject = `Tilbud takoverlys WG18 — ${company}`;
+
+    const lines = [
+      "Hei styret i Welhavensgate 18,",
+      "",
+      `Firma:          ${company}`,
+      `Kontaktperson:  ${contact}`,
+      `E-post:         ${email}`,
+      phone ? `Telefon:        ${phone}` : null,
+      "",
+      "Tilbudet omfatter:",
+      overlys ? "  ✓ Post 01 — Takoverlys (20 m × 600 mm)" : "  — Post 01 — Takoverlys (ikke inkludert)",
+      vindus  ? "  ✓ Post 02 — Vindusrekker (2 × 20 m, opsjon)" : "  — Post 02 — Vindusrekker (ikke inkludert)",
+      "",
+      msg ? "Merknader:" : null,
+      msg || null,
+      msg ? "" : null,
+      "Vennlig hilsen,",
+      contact,
+      company,
+    ].filter(l => l !== null);
+
+    const body = lines.join("\n");
+
+    const href = `mailto:${encodeURIComponent('styret.wg18@gmail.com')}`
+      + `?cc=${encodeURIComponent(email)}`
+      + `&subject=${encodeURIComponent(subject)}`
+      + `&body=${encodeURIComponent(body)}`;
+
+    window.location.href = href;
+  });
+</script>
+</body>
+</html>
