@@ -110,6 +110,7 @@
   }
   .item:nth-of-type(1){animation-delay:.15s}
   .item:nth-of-type(2){animation-delay:.3s}
+  .item:nth-of-type(3){animation-delay:.45s}
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
   @media (max-width:760px){.item{grid-template-columns:1fr;gap:28px;padding:26px 24px}}
@@ -347,6 +348,13 @@
   </p>
 
   <p class="lede" style="margin-top:18px">
+    Vi har i perioden ca 14. april – 14. juli stilas tilgjengelig på
+    frontsiden av bygget i sammenheng med oppussing av fasade. Adkomst til tak
+    vil i perioden være langt enklere enn ellers — det kan dermed være gunstig
+    å handle raskt for begge parter.
+  </p>
+
+  <p class="lede" style="margin-top:18px">
     Oppdragsgiver er sameiet, på vegne av seksjonseiere. Utskifting av
     takoverlys og vindusrekker er den enkelte seksjonseiers ansvar — sameiet
     fasiliterer innhenting av tilbud og koordinering av arbeidet.
@@ -364,7 +372,26 @@
 
     <article class="item">
       <div class="head">
-        <span>Post 01 · Takoverlys</span>
+        <span>Post 01 · Tilstandsvurdering</span>
+        <span class="tag">Hovedpost</span>
+      </div>
+
+      <div>
+        <h2>Tilstands<em>vurdering</em></h2>
+        <p class="desc">
+          Tilstandsvurdering av tak, vinduer og overlys. Vurderingen skal gi
+          grunnlag for beslutning om omfang og prioritering av videre arbeid.
+        </p>
+      </div>
+
+      <div class="dims">
+        <div class="row"><span>Omfang</span><b>Tak, vinduer, overlys</b></div>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="head">
+        <span>Post 02 · Takoverlys</span>
         <span class="tag">Hovedpost</span>
       </div>
 
@@ -387,7 +414,7 @@
 
     <article class="item">
       <div class="head">
-        <span>Post 02 · Vindusrekker</span>
+        <span>Post 03 · Vindusrekker</span>
         <span class="tag opt"><b>Opsjon</b> — pris oppgis separat</span>
       </div>
 
@@ -479,12 +506,16 @@
         <label>Tilbudet omfatter</label>
         <div class="checks">
           <label class="check">
+            <input type="checkbox" id="opt-tilstand" checked>
+            <span class="txt">Post 01 · Tilstandsvurdering<small>Tak, vinduer, overlys — hovedpost</small></span>
+          </label>
+          <label class="check">
             <input type="checkbox" id="opt-overlys" checked>
-            <span class="txt">Post 01 · Takoverlys<small>20 m × 600 mm — hovedpost</small></span>
+            <span class="txt">Post 02 · Takoverlys<small>20 m × 600 mm — hovedpost</small></span>
           </label>
           <label class="check">
             <input type="checkbox" id="opt-vindusrekker">
-            <span class="txt">Post 02 · Vindusrekker<small>2 × 20 m — opsjon</small></span>
+            <span class="txt">Post 03 · Vindusrekker<small>2 × 20 m — opsjon</small></span>
           </label>
         </div>
       </div>
@@ -524,8 +555,9 @@
     const email   = $('email').value.trim();
     const phone   = $('phone').value.trim();
     const msg     = $('message').value.trim();
-    const overlys = $('opt-overlys').checked;
-    const vindus  = $('opt-vindusrekker').checked;
+    const tilstand = $('opt-tilstand').checked;
+    const overlys  = $('opt-overlys').checked;
+    const vindus   = $('opt-vindusrekker').checked;
 
     if (!company || !contact || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
       [company ? null : $('company'),
@@ -546,8 +578,9 @@
       phone ? `Telefon:        ${phone}` : null,
       "",
       "Tilbudet omfatter:",
-      overlys ? "  ✓ Post 01 — Takoverlys (20 m × 600 mm)" : "  — Post 01 — Takoverlys (ikke inkludert)",
-      vindus  ? "  ✓ Post 02 — Vindusrekker (2 × 20 m, opsjon)" : "  — Post 02 — Vindusrekker (ikke inkludert)",
+      tilstand ? "  ✓ Post 01 — Tilstandsvurdering (tak, vinduer, overlys)" : "  — Post 01 — Tilstandsvurdering (ikke inkludert)",
+      overlys  ? "  ✓ Post 02 — Takoverlys (20 m × 600 mm)" : "  — Post 02 — Takoverlys (ikke inkludert)",
+      vindus   ? "  ✓ Post 03 — Vindusrekker (2 × 20 m, opsjon)" : "  — Post 03 — Vindusrekker (ikke inkludert)",
       "",
       msg ? "Merknader:" : null,
       msg || null,
