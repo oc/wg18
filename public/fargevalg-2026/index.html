@@ -253,6 +253,12 @@
   .card .foot .arrows button:hover{background:var(--ink);color:var(--bone)}
   .card .foot .arrows button:disabled{opacity:.2;cursor:default;background:transparent;color:var(--ink)}
 
+  @media (max-width:760px){
+    .card{cursor:default}
+    .card .foot .handle{display:none}
+    .ribbon{display:none}
+  }
+
   /* submit */
   .submit{
     margin-top:88px;
@@ -811,14 +817,16 @@
     refresh();
   });
 
-  Sortable.create(stack, {
-    animation: 420,
-    easing: "cubic-bezier(.2,.8,.2,1)",
-    ghostClass: 'ghost',
-    chosenClass: 'dragging',
-    dragClass: 'dragging',
-    onEnd: refresh,
-  });
+  if (window.matchMedia('(min-width:761px)').matches) {
+    Sortable.create(stack, {
+      animation: 420,
+      easing: "cubic-bezier(.2,.8,.2,1)",
+      ghostClass: 'ghost',
+      chosenClass: 'dragging',
+      dragClass: 'dragging',
+      onEnd: refresh,
+    });
+  }
 
   refresh();
 
