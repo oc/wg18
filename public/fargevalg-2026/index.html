@@ -121,21 +121,29 @@
   .stack li:nth-child(1) .card{animation-delay:.2s}
   .stack li:nth-child(2) .card{animation-delay:.36s}
   .stack li:nth-child(3) .card{animation-delay:.52s}
+  .stack li:nth-child(4) .card{animation-delay:.68s}
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
   .card[data-forslag="01"]{
-    --c-wall:  #A6AE8E;
-    --c-trim:  #E2D6BB;
+    --c-wall:   #A6AE8E;
+    --c-trim:   #E2D6BB;
+    --c-sokkel: #6B7562;
   }
   .card[data-forslag="02"]{
-    --c-wall:  #595E52;
-    --c-trim:  #F2EAD6;
+    --c-wall:   #A6AE8E;
+    --c-trim:   #F2EDE4;
+    --c-sokkel: #A8A49E;
   }
-  .card.tba{
-    --c-wall:  #CFCABA;
-    --c-trim:  #E8E0CB;
+  .card[data-forslag="03"]{
+    --c-wall:   #C2BEB8;
+    --c-trim:   #F2EDE4;
+    --c-sokkel: #787470;
   }
-  .card.tba .facade{opacity:.55}
+  .card[data-forslag="04"]{
+    --c-wall:   #D5D5D5;
+    --c-trim:   #EAEAEA;
+    --c-sokkel: #A8A49E;
+  }
 
   .card:hover{
     background:#F6F0E0;
@@ -183,11 +191,11 @@
   }
   .facade .f-wall   { fill: var(--c-wall); }
   .facade .f-trim   { fill: var(--c-trim); }
-  .facade .f-frame  { fill: #1F1A15; }
+  .facade .f-frame  { fill: #3B3B3B; }
   .facade .f-glass  { fill: #2B3640; }
   .facade .f-shop   { fill: #C8CEC8; }
   .facade .f-roof   { fill: #14110E; }
-  .facade .f-plinth { fill: #2B2720; }
+  .facade .f-plinth { fill: var(--c-sokkel, #2B2720); }
 
   .row{
     margin-top:24px;
@@ -195,7 +203,6 @@
     grid-template-columns:1fr 1fr;
     gap:26px;
   }
-  @media (max-width:640px){.row{grid-template-columns:1fr;gap:26px}}
 
   .swatch{display:flex;flex-direction:column;gap:10px}
   .swatch .role{
@@ -215,16 +222,13 @@
     font-size:16px;color:var(--ink);
   }
 
-  .swatch.tba .chip{
-    background:
-      repeating-linear-gradient(
-        135deg,
-        transparent 0 14px,
-        rgba(26,20,17,.08) 14px 15px
-      );
-    border-style:dashed;
+  .swatches{
+    margin-top:24px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:26px 26px;
   }
-  .swatch.tba .ncs{color:var(--ink-soft);opacity:.7}
+  @media (max-width:640px){.swatches{grid-template-columns:1fr 1fr;gap:20px}}
 
   .card .foot{
     margin-top:24px;padding-top:16px;
@@ -506,12 +510,12 @@
 
 <main>
 
-  <div class="kicker">WG18 · Welhavensgate 18 · Vår 2026</div>
+  <div class="kicker">WG18 · Welhavens gate 18 · Vår 2026</div>
 
   <h1>Fargevalg</h1>
 
   <p class="lede">
-    Tre forslag til ny fasadefarge for bygården. Studer fasadene,
+    Fire forslag til ny fasadefarge for bygården. Studer fasadene,
     <em>dra kortene i ønsket rekkefølge</em> — øverst er din favoritt —
     og send inn stemmen din til styret.
   </p>
@@ -525,26 +529,36 @@
   <ol class="stack" id="stack">
 
     <li>
-      <article class="card" data-forslag="01" data-key="01" data-title="Forslag 01">
+      <article class="card" data-forslag="01" data-key="01" data-title="Forslag 01 — Grønn m/ mørk sokkel">
         <div class="head">
-          <span>Forslag 01 · NCS</span>
+          <span>Forslag 01 · Grønn m/ mørk sokkel</span>
           <span class="rank">Posisjon <b data-pos>01</b></span>
         </div>
 
         <div class="facade-wrap photo">
-          <img src="forslag-01.jpg" alt="Welhavensgate 18 i sagegrønn fasadefarge — Forslag 01" loading="lazy">
+          <img src="forslag-01.jpg" alt="Welhavens gate 18 i sagegrønn fasadefarge — Forslag 01" loading="lazy">
         </div>
 
-        <div class="row">
-          <div class="swatch hovedfarge">
+        <div class="swatches">
+          <div class="swatch">
             <span class="role">Hovedfarge</span>
             <div class="chip" style="background:#A6AE8E"></div>
             <span class="ncs">S 3010-G40Y</span>
           </div>
-          <div class="swatch omramninger">
+          <div class="swatch">
             <span class="role">Omramninger / detaljer</span>
             <div class="chip" style="background:#E2D6BB"></div>
             <span class="ncs">S 1505-Y30R</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Sokkel</span>
+            <div class="chip" style="background:#6B7562"></div>
+            <span class="ncs">S 5010-G30Y</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Vinduer</span>
+            <div class="chip" style="background:#3B3B3B"></div>
+            <span class="ncs">Dempet sort</span>
           </div>
         </div>
 
@@ -559,9 +573,9 @@
     </li>
 
     <li>
-      <article class="card" data-forslag="02" data-key="02" data-title="Forslag 02">
+      <article class="card" data-forslag="02" data-key="02" data-title="Forslag 02 — Grønn m/ grå sokkel">
         <div class="head">
-          <span>Forslag 02 · NCS</span>
+          <span>Forslag 02 · Grønn m/ grå sokkel</span>
           <span class="rank">Posisjon <b data-pos>02</b></span>
         </div>
 
@@ -571,16 +585,26 @@
           </svg>
         </div>
 
-        <div class="row">
-          <div class="swatch hovedfarge">
+        <div class="swatches">
+          <div class="swatch">
             <span class="role">Hovedfarge</span>
-            <div class="chip" style="background:#595E52"></div>
-            <span class="ncs">S 6005-G20Y</span>
+            <div class="chip" style="background:#A6AE8E"></div>
+            <span class="ncs">S 3010-G40Y</span>
           </div>
-          <div class="swatch omramninger">
+          <div class="swatch">
             <span class="role">Omramninger / detaljer</span>
-            <div class="chip" style="background:#F2EAD6"></div>
-            <span class="ncs">S 0505-Y20R</span>
+            <div class="chip" style="background:#F2EDE4"></div>
+            <span class="ncs">S 0502-Y</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Sokkel</span>
+            <div class="chip" style="background:#A8A49E"></div>
+            <span class="ncs">S 3502-Y</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Vinduer</span>
+            <div class="chip" style="background:#3B3B3B"></div>
+            <span class="ncs">Dempet sort</span>
           </div>
         </div>
 
@@ -595,9 +619,9 @@
     </li>
 
     <li>
-      <article class="card tba" data-forslag="03" data-key="03" data-title="Forslag 03">
+      <article class="card" data-forslag="03" data-key="03" data-title="Forslag 03 — Varmgrå">
         <div class="head">
-          <span>Forslag 03 · NCS</span>
+          <span>Forslag 03 · Varmgrå</span>
           <span class="rank">Posisjon <b data-pos>03</b></span>
         </div>
 
@@ -607,16 +631,26 @@
           </svg>
         </div>
 
-        <div class="row">
-          <div class="swatch hovedfarge tba">
+        <div class="swatches">
+          <div class="swatch">
             <span class="role">Hovedfarge</span>
-            <div class="chip"></div>
-            <span class="ncs">TBA</span>
+            <div class="chip" style="background:#C2BEB8"></div>
+            <span class="ncs">S 2502-Y</span>
           </div>
-          <div class="swatch omramninger tba">
+          <div class="swatch">
             <span class="role">Omramninger / detaljer</span>
-            <div class="chip"></div>
-            <span class="ncs">TBA</span>
+            <div class="chip" style="background:#F2EDE4"></div>
+            <span class="ncs">S 0502-Y</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Sokkel</span>
+            <div class="chip" style="background:#787470"></div>
+            <span class="ncs">S 5502-Y</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Vinduer</span>
+            <div class="chip" style="background:#3B3B3B"></div>
+            <span class="ncs">Dempet sort</span>
           </div>
         </div>
 
@@ -625,7 +659,53 @@
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
             Dra for å rangere
           </span>
-          <span>Avventer fargeprøver</span>
+          <span>NCS · skjermgjengivelse omtrentlig</span>
+        </div>
+      </article>
+    </li>
+
+    <li>
+      <article class="card" data-forslag="04" data-key="04" data-title="Forslag 04 — Klassisk grå">
+        <div class="head">
+          <span>Forslag 04 · Klassisk grå</span>
+          <span class="rank">Posisjon <b data-pos>04</b></span>
+        </div>
+
+        <div class="facade-wrap">
+          <svg class="facade" viewBox="0 0 800 540" preserveAspectRatio="xMidYMid meet">
+            <use href="#facade" width="800" height="540"/>
+          </svg>
+        </div>
+
+        <div class="swatches">
+          <div class="swatch">
+            <span class="role">Hovedfarge</span>
+            <div class="chip" style="background:#D5D5D5"></div>
+            <span class="ncs">S 1000-N</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Omramninger / detaljer</span>
+            <div class="chip" style="background:#EAEAEA"></div>
+            <span class="ncs">S 0500-N</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Sokkel</span>
+            <div class="chip" style="background:#A8A49E"></div>
+            <span class="ncs">S 3502-Y</span>
+          </div>
+          <div class="swatch">
+            <span class="role">Vinduer</span>
+            <div class="chip" style="background:#3B3B3B"></div>
+            <span class="ncs">Dempet sort</span>
+          </div>
+        </div>
+
+        <div class="foot">
+          <span class="handle">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
+            Dra for å rangere
+          </span>
+          <span>NCS · skjermgjengivelse omtrentlig</span>
         </div>
       </article>
     </li>
@@ -647,7 +727,7 @@
 
       <div class="actions">
         <p class="summary">
-          Din rangering: <b id="order-line">Forslag 01 → Forslag 02 → Forslag 03</b>
+          Din rangering: <b id="order-line">Forslag 01 → Forslag 02 → Forslag 03 → Forslag 04</b>
         </p>
         <button class="send copy" type="button" id="copy-btn">
           Kopier til utklippstavle
