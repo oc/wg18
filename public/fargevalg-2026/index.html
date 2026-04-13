@@ -241,6 +241,18 @@
   .card .foot .handle{display:flex;align-items:center;gap:8px}
   .card .foot .handle svg{display:block}
 
+  .card .foot .arrows{display:flex;gap:6px}
+  .card .foot .arrows button{
+    background:transparent;border:1px solid var(--ink);
+    width:32px;height:32px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink);
+    font-size:14px;line-height:1;
+    transition:background .2s, color .2s;
+  }
+  .card .foot .arrows button:hover{background:var(--ink);color:var(--bone)}
+  .card .foot .arrows button:disabled{opacity:.2;cursor:default;background:transparent;color:var(--ink)}
+
   /* submit */
   .submit{
     margin-top:88px;
@@ -567,7 +579,10 @@
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
             Dra for å rangere
           </span>
-          <span>NCS · skjermgjengivelse omtrentlig</span>
+          <span class="arrows">
+            <button type="button" class="move-up" title="Flytt opp">↑</button>
+            <button type="button" class="move-down" title="Flytt ned">↓</button>
+          </span>
         </div>
       </article>
     </li>
@@ -611,7 +626,10 @@
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
             Dra for å rangere
           </span>
-          <span>NCS · skjermgjengivelse omtrentlig</span>
+          <span class="arrows">
+            <button type="button" class="move-up" title="Flytt opp">↑</button>
+            <button type="button" class="move-down" title="Flytt ned">↓</button>
+          </span>
         </div>
       </article>
     </li>
@@ -655,7 +673,10 @@
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
             Dra for å rangere
           </span>
-          <span>NCS · skjermgjengivelse omtrentlig</span>
+          <span class="arrows">
+            <button type="button" class="move-up" title="Flytt opp">↑</button>
+            <button type="button" class="move-down" title="Flytt ned">↓</button>
+          </span>
         </div>
       </article>
     </li>
@@ -699,7 +720,10 @@
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="3" cy="3" r="1.2" fill="#3B2E25"/><circle cx="3" cy="7" r="1.2" fill="#3B2E25"/><circle cx="3" cy="11" r="1.2" fill="#3B2E25"/><circle cx="11" cy="3" r="1.2" fill="#3B2E25"/><circle cx="11" cy="7" r="1.2" fill="#3B2E25"/><circle cx="11" cy="11" r="1.2" fill="#3B2E25"/></svg>
             Dra for å rangere
           </span>
-          <span>NCS · skjermgjengivelse omtrentlig</span>
+          <span class="arrows">
+            <button type="button" class="move-up" title="Flytt opp">↑</button>
+            <button type="button" class="move-down" title="Flytt ned">↓</button>
+          </span>
         </div>
       </article>
     </li>
@@ -756,13 +780,30 @@
     }));
 
   const refresh = () => {
-    const cards = [...stack.querySelectorAll('.card')];
-    cards.forEach((c, i) => {
+    const items = [...stack.children];
+    items.forEach((li, i) => {
+      const c = li.querySelector('.card');
       const pos = c.querySelector('[data-pos]');
       if (pos) pos.textContent = String(i+1).padStart(2,'0');
+      const up = c.querySelector('.move-up');
+      const down = c.querySelector('.move-down');
+      if (up) up.disabled = i === 0;
+      if (down) down.disabled = i === items.length - 1;
     });
-    orderLine.textContent = cards.map(c => c.dataset.title).join(' → ');
+    orderLine.textContent = items.map(li => li.querySelector('.card').dataset.title).join(' → ');
   };
+
+  stack.addEventListener('click', (e) => {
+    const btn = e.target.closest('.move-up, .move-down');
+    if (!btn || btn.disabled) return;
+    const li = btn.closest('li');
+    if (btn.classList.contains('move-up') && li.previousElementSibling) {
+      stack.insertBefore(li, li.previousElementSibling);
+    } else if (btn.classList.contains('move-down') && li.nextElementSibling) {
+      stack.insertBefore(li.nextElementSibling, li);
+    }
+    refresh();
+  });
 
   Sortable.create(stack, {
     animation: 420,
