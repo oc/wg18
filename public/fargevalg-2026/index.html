@@ -753,7 +753,7 @@
       <div class="field">
         <label for="email">Din e-post</label>
         <input id="email" type="email" required placeholder="navn@eksempel.no" autocomplete="email">
-        <span class="cc">cc → styret.wg18@gmail.com</span>
+        <span class="cc">cc → styret.wg18@gmail.com, mortanimail@gmail.com</span>
       </div>
 
       <div class="actions">
@@ -865,7 +865,7 @@
     if (!validateEmail()) return;
     const { email, subject, body } = buildEmail();
     window.location.href = `mailto:${encodeURIComponent(email)}`
-      + `?cc=${encodeURIComponent('styret.wg18@gmail.com')}`
+      + `?cc=${encodeURIComponent('styret.wg18@gmail.com,mortanimail@gmail.com')}`
       + `&subject=${encodeURIComponent(subject)}`
       + `&body=${encodeURIComponent(body)}`;
   });
@@ -873,7 +873,7 @@
   document.getElementById('copy-btn').addEventListener('click', () => {
     if (!validateEmail()) return;
     const { subject, body } = buildEmail();
-    const text = `Til: styret.wg18@gmail.com\nEmne: ${subject}\n\n${body}`;
+    const text = `Til: styret.wg18@gmail.com, mortanimail@gmail.com\nEmne: ${subject}\n\n${body}`;
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById('copy-btn');
       btn.textContent = 'Kopiert!';
