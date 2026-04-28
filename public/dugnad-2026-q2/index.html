@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dugnad Q2 2026 — WG18</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bone:      #F2ECDE;
+    --bone-deep: #E8E0CB;
+    --bone-card: #EDE5D2;
+    --ink:       #1A1411;
+    --ink-soft:  #5C4F45;
+    --rust:      #B34118;
+    --moss:      #4A5A2D;
+    --rule:      rgba(26,20,17,.15);
+    --rule-soft: rgba(26,20,17,.08);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bone);color:var(--ink);-webkit-font-smoothing:antialiased}
+  body{
+    font-family:"Fraunces",Georgia,serif;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* film grain */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.06  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/></svg>");
+    mix-blend-mode:multiply;opacity:.4;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:99;
+    background:radial-gradient(120% 80% at 50% 0%, transparent 55%, rgba(26,20,17,.16) 100%);
+  }
+
+  main{
+    max-width:980px;
+    margin:0 auto;
+    padding:72px 56px 140px;
+    position:relative;
+    z-index:1;
+  }
+  @media (max-width:760px){
+    main{padding:48px 24px 100px}
+  }
+
+  /* masthead */
+  .kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;align-items:center;gap:14px;
+  }
+  .kicker::before{
+    content:"";width:32px;height:1px;background:var(--ink);display:inline-block;
+  }
+
+  h1{
+    margin-top:32px;
+    font-weight:300;
+    font-variation-settings:"opsz" 144, "SOFT" 50;
+    font-size:clamp(72px, 14vw, 200px);
+    line-height:.84;
+    letter-spacing:-.045em;
+  }
+  h1 em{
+    font-style:italic;
+    font-weight:300;
+    color:var(--rust);
+  }
+
+  .lede{
+    margin-top:38px;
+    max-width:600px;
+    font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:19px;line-height:1.5;
+    color:var(--ink-soft);
+  }
+  .lede em{font-style:italic;color:var(--ink)}
+  .lede + .lede{margin-top:14px}
+
+  .ribbon{
+    margin-top:48px;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    padding:14px 0;
+    display:flex;align-items:center;gap:14px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);
+    flex-wrap:wrap;
+  }
+  .ribbon .dot{width:4px;height:4px;background:var(--ink);border-radius:50%;display:inline-block}
+
+  /* section block */
+  .block{
+    margin-top:72px;
+  }
+  .block-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--ink);
+    flex-wrap:wrap;
+  }
+  .block-head h2{
+    font-weight:300;
+    font-variation-settings:"opsz" 96;
+    font-size:clamp(36px, 5vw, 56px);
+    line-height:.95;
+    letter-spacing:-.02em;
+  }
+  .block-head h2 em{font-style:italic;color:var(--rust)}
+  .block-head .meta{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .block-intro{
+    margin-top:18px;
+    font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:17px;line-height:1.55;
+    color:var(--ink-soft);
+    max-width:640px;
+  }
+  .block-intro em{font-style:italic;color:var(--ink)}
+
+  /* card primitive */
+  .card{
+    background:var(--bone-card);
+    border:1px solid var(--ink);
+    padding:28px 30px 26px;
+    box-shadow: 10px 12px 0 -1px rgba(26,20,17,.12);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, background .35s ease;
+  }
+
+  /* legal callout */
+  .legal{
+    margin-top:24px;
+    background:var(--bone-deep);
+  }
+  .legal .legal-head{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink);
+    padding-bottom:14px;border-bottom:1px solid var(--ink);
+    margin-bottom:16px;
+  }
+  .legal ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .legal li{
+    font-weight:380;font-variation-settings:"opsz" 14;
+    font-size:15.5px;line-height:1.55;color:var(--ink);
+    padding-left:24px;position:relative;
+  }
+  .legal li::before{
+    content:"§";position:absolute;left:0;top:-1px;
+    font-style:italic;color:var(--rust);font-size:18px;
+  }
+
+  /* budget */
+  .budget-grid{
+    margin-top:28px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+  @media (max-width:760px){.budget-grid{grid-template-columns:1fr}}
+
+  .budget-table{
+    width:100%;border-collapse:collapse;
+    font-weight:380;font-variation-settings:"opsz" 14;
+  }
+  .budget-table th, .budget-table td{
+    text-align:left;
+    padding:9px 0;
+    border-bottom:1px dashed var(--rule);
+    font-size:15px;
+  }
+  .budget-table th{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:500;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:11px;
+  }
+  .budget-table td.num, .budget-table th.num{
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+    font-family:"JetBrains Mono",monospace;
+    font-size:14px;
+  }
+  .budget-table tr.subtotal td{
+    font-weight:500;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    padding-top:11px;padding-bottom:11px;
+  }
+  .budget-table tr.total td{
+    font-style:italic;
+    font-weight:500;
+    border-top:1px solid var(--ink);
+    border-bottom:none;
+    padding-top:14px;
+    font-size:17px;
+  }
+  .budget-table tr.total td.num{font-size:16px;font-style:normal;font-weight:500}
+
+  .stat-stack{display:flex;flex-direction:column;gap:18px}
+  .stat{
+    border-bottom:1px dashed var(--rule);
+    padding-bottom:16px;
+  }
+  .stat:last-child{border-bottom:none;padding-bottom:0}
+  .stat .label{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .stat .value{
+    font-weight:300;
+    font-variation-settings:"opsz" 96;
+    font-size:46px;line-height:1;
+    letter-spacing:-.02em;
+    margin-top:8px;
+  }
+  .stat .value em{font-style:italic}
+  .stat .value.warn em{color:var(--rust)}
+  .stat .value.good em{color:var(--moss)}
+  .stat .sub{
+    margin-top:6px;
+    font-style:italic;font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:14px;color:var(--ink-soft);
+  }
+
+  .non-signup{
+    margin-top:24px;
+    padding:14px 16px;
+    border:1px dashed var(--ink);
+    background:var(--bone);
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .non-signup b{color:var(--rust);font-weight:500}
+
+  /* picker */
+  .picker{
+    position:sticky;top:16px;z-index:50;
+    margin-top:64px;
+    background:var(--ink);color:var(--bone);
+    border:1px solid var(--ink);
+    padding:22px 26px;
+    box-shadow: 10px 12px 0 -1px rgba(26,20,17,.18);
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:24px;
+    align-items:center;
+  }
+  @media (max-width:640px){
+    .picker{grid-template-columns:1fr;gap:14px;position:static}
+  }
+  .picker .label{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--bone-deep);
+  }
+  .picker .label em{font-style:italic;color:#fff;font-family:"Fraunces",serif;text-transform:none;letter-spacing:0;font-size:13px;font-variation-settings:"opsz" 14}
+  .picker select{
+    appearance:none;-webkit-appearance:none;
+    background:transparent;color:var(--bone);
+    border:none;border-bottom:1px solid var(--bone-deep);
+    font-family:"Fraunces",serif;font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:22px;
+    padding:6px 28px 6px 0;
+    width:100%;
+    cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8' fill='none'><path d='M1 1 L7 7 L13 1' stroke='%23F2ECDE' stroke-width='1.4'/></svg>");
+    background-repeat:no-repeat;background-position:right 4px center;
+  }
+  .picker select option{background:var(--ink);color:var(--bone)}
+  .picker select:focus{outline:none;border-bottom-color:#fff}
+
+  /* task lists */
+  .tasks{
+    margin-top:28px;
+    list-style:none;
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .task{
+    border:1px solid var(--ink);
+    background:var(--bone-card);
+    padding:18px 22px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:18px;
+    align-items:start;
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+    cursor:pointer;
+  }
+  .task:hover{
+    background:#F6F0E0;
+    transform:translate(-2px,-2px);
+    box-shadow: 6px 8px 0 -1px rgba(26,20,17,.12);
+  }
+  .task.checked{
+    background:#EBE3CB;
+    box-shadow: inset 4px 0 0 var(--rust);
+  }
+  .task.disabled{opacity:.6;pointer-events:none}
+
+  /* custom checkbox */
+  .task .check{
+    width:22px;height:22px;
+    border:1px solid var(--ink);
+    background:var(--bone);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    margin-top:2px;
+    transition:background .2s ease;
+  }
+  .task input{position:absolute;opacity:0;pointer-events:none}
+  .task.checked .check{background:var(--ink)}
+  .task.checked .check::after{
+    content:"";display:block;width:10px;height:6px;
+    border-left:1.5px solid var(--bone);
+    border-bottom:1.5px solid var(--bone);
+    transform:rotate(-45deg) translate(1px,-1px);
+  }
+
+  .task .body .name{
+    font-weight:400;
+    font-variation-settings:"opsz" 14;
+    font-size:18px;line-height:1.35;
+    color:var(--ink);
+  }
+  .task .body .name em{font-style:italic}
+  .task .body .meta{
+    margin-top:8px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:14px;
+  }
+  .task .body .meta .sep{opacity:.4}
+  .task .body .notes{
+    margin-top:10px;
+    font-style:italic;font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:14px;line-height:1.5;
+    color:var(--ink-soft);
+  }
+
+  .task .signups{
+    text-align:right;
+    flex-shrink:0;
+  }
+  .task .signups .count{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.14em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .task .signups .count b{
+    font-family:"Fraunces",serif;
+    font-style:italic;font-weight:500;
+    font-variation-settings:"opsz" 14;
+    font-size:18px;color:var(--rust);
+    letter-spacing:0;
+    margin-right:4px;
+  }
+  .task .signups .who{
+    margin-top:6px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.12em;
+    color:var(--ink);
+  }
+  .task .signups .empty{
+    font-style:italic;
+    font-family:"Fraunces",serif;
+    font-size:13px;
+    color:var(--ink-soft);
+    text-transform:none;
+    letter-spacing:0;
+  }
+
+  @media (max-width:640px){
+    .task{grid-template-columns:auto 1fr;gap:14px;padding:16px}
+    .task .signups{grid-column:1 / -1;text-align:left;border-top:1px dashed var(--rule);padding-top:10px;margin-top:6px}
+  }
+
+  /* submit */
+  .submit{
+    margin-top:88px;
+    border-top:1px solid var(--ink);
+    padding-top:44px;
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:44px;
+    align-items:end;
+  }
+  @media (max-width:760px){.submit{grid-template-columns:1fr;gap:32px}}
+
+  .submit .head{
+    font-weight:300;
+    font-variation-settings:"opsz" 144;
+    font-size:clamp(42px, 6vw, 72px);
+    line-height:.92;letter-spacing:-.02em;
+  }
+  .submit .head em{font-style:italic;color:var(--rust)}
+  .submit .head small{
+    display:block;margin-top:14px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);
+    font-style:normal;
+  }
+
+  .summary{
+    font-style:italic;font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:16px;color:var(--ink-soft);
+    line-height:1.55;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:18px;
+    margin-bottom:22px;
+    min-height:54px;
+  }
+  .summary b{
+    color:var(--rust);font-weight:500;font-style:normal;
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;
+  }
+  .summary .seksjon-tag{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink);font-style:normal;font-weight:500;
+    border:1px solid var(--ink);padding:4px 8px;margin-right:10px;
+    display:inline-block;
+  }
+
+  button.send{
+    background:var(--ink);color:var(--bone);
+    border:1px solid var(--ink);
+    padding:22px 32px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    cursor:pointer;
+    display:inline-flex;align-items:center;gap:18px;
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+    width:100%;justify-content:space-between;
+  }
+  button.send:hover:not(:disabled){
+    background:var(--rust);border-color:var(--rust);
+    transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);
+  }
+  button.send:active:not(:disabled){transform:translate(0,0);box-shadow:0 0 0 var(--ink)}
+  button.send:disabled{
+    background:var(--bone-deep);color:var(--ink-soft);
+    border-color:var(--ink-soft);cursor:not-allowed;
+  }
+  button.send svg{display:block}
+
+  .status{
+    margin-top:18px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    padding:12px 16px;border:1px solid currentColor;
+    display:none;
+  }
+  .status.success{display:block;color:var(--moss)}
+  .status.error{display:block;color:var(--rust)}
+
+  footer{
+    margin-top:96px;
+    padding-top:24px;
+    border-top:1px solid var(--rule);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <div class="kicker">WG18 · Welhavens gate 18 · Vår 2026</div>
+
+  <h1>Dugnad <em>Q2</em></h1>
+
+  <p class="lede">
+    To sosiale dugnadsdager i mai. Riv den slitne plenen, vask fellesarealet,
+    mal boden, rull ut ny ferdigplen. <em>Velg din seksjon, hak av oppgavene
+    du tar ansvar for, send inn.</em> Flere kan melde seg på samme oppgave.
+  </p>
+
+  <p class="lede">
+    De fleste oppgavene kan utføres <em>når det passer</em> — ikke kun på
+    dugnadshelgen. To unntak: <em>kalking</em> og <em>plenlegging</em> må
+    skje med minst 2 ukers mellomrom for at den nye plenen skal trives.
+  </p>
+
+  <p class="lede">
+    Det som ikke blir plukket, må kjøpes inn eksternt — og restbudsjettet
+    fordeles på alle seksjonene. Modellen er et <em>styre-vedtatt
+    forsøksprosjekt</em> for 2026, hjemlet i <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">eierseksjonsloven §29</a>. Årets forsøk avregnes
+    på felleskostnadene fordelt over <em>resten av året</em> (mai–desember).
+  </p>
+
+  <div class="ribbon">
+    <span>Lørdag 9. mai</span>
+    <span class="dot"></span>
+    <span>Søndag 10. mai</span>
+    <span class="dot"></span>
+    <span>10:00–15:00</span>
+    <span class="dot"></span>
+    <span>Påmeldingsfrist 2. mai</span>
+  </div>
+
+  <!-- BUDGET -->
+  <section class="block" id="budget">
+    <div class="block-head">
+      <h2>Budsjett &amp; <em>modell</em></h2>
+      <span class="meta">12 seksjoner · 79 t arbeid</span>
+    </div>
+    <p class="block-intro">
+      Hver seksjon faktureres en lik dugnadsavgift som dekker materialer,
+      ekstern blikkenslager til bodtaket, mat &amp; drikke — og estimert
+      kostnad ved å kjøpe inn arbeidskraft til oppgavene som ingen melder seg på.
+      <em>For hver dokumentert dugnadstime refunderes 650 kr.</em>
+    </p>
+
+    <div class="budget-grid">
+      <div>
+        <table class="budget-table">
+          <thead>
+            <tr><th>Fastkostnader</th><th class="num">Kr</th><th class="num">Pott</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ferdigplen 28 kvm + frakt</td><td class="num">3 500</td><td class="num">B</td></tr>
+            <tr><td>Vekstjord ~2 m³</td><td class="num">3 000</td><td class="num">B</td></tr>
+            <tr><td>Grovsand mot leirjord</td><td class="num">500</td><td class="num">B</td></tr>
+            <tr><td>Hagekalk + oppstartsgjødsel</td><td class="num">350</td><td class="num">B</td></tr>
+            <tr><td>Maling, grunning, pensler</td><td class="num">2 500</td><td class="num">A</td></tr>
+            <tr><td>Takshingel, underlagspapp, mønekam, beslag</td><td class="num">2 500</td><td class="num">A</td></tr>
+            <tr><td>Nye planter</td><td class="num">2 000</td><td class="num">B</td></tr>
+            <tr><td>Gardena sprinkler + vanningsur (Clas Ohlson)</td><td class="num">700</td><td class="num">B</td></tr>
+            <tr><td>pH-strips + drenasje-test</td><td class="num">200</td><td class="num">B</td></tr>
+            <tr><td>Diverse forbruk</td><td class="num">800</td><td class="num">B</td></tr>
+            <tr class="subtotal"><td>Materialer</td><td class="num">16 050</td><td class="num"></td></tr>
+            <tr><td>Mat &amp; drikke begge dager</td><td class="num">2 500</td><td class="num">B</td></tr>
+            <tr class="total"><td>Sum fastkostnader</td><td class="num">18 550</td><td class="num"></td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:14px;font-style:italic;font-weight:380;font-variation-settings:'opsz' 14;font-size:13px;color:var(--ink-soft);line-height:1.5">
+          Pott <em>A</em> · bygg-vedlikehold (eierbrøk) · Pott <em>B</em> · bruks-nytte (flat 1/12)
+        </p>
+      </div>
+
+      <div class="stat-stack">
+        <div class="stat">
+          <div class="label">Total ramme</div>
+          <div class="value"><em>69 900</em></div>
+          <div class="sub">fastkostnader + arbeidsbudsjett (79 t × 650 kr)</div>
+        </div>
+        <div class="stat">
+          <div class="label">Per seksjon · før refusjon</div>
+          <div class="value"><em>5 535–6 068</em></div>
+          <div class="sub">spennvidde etter to-pott-fordeling (Modell B)</div>
+        </div>
+        <div class="stat">
+          <div class="label">Påmeldt arbeid</div>
+          <div class="value good"><em id="coverage-hours">0 t</em></div>
+          <div class="sub" id="coverage-pct">0 % av 79 t plukket</div>
+        </div>
+        <div class="stat">
+          <div class="label">Restbudsjett · ekstern hjelp</div>
+          <div class="value warn"><em id="rest-amount">51 350</em></div>
+          <div class="sub" id="rest-hours">79 t må kjøpes inn</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="non-signup">
+      Seksjoner uten påmelding: <b id="non-signup-list">alle 12</b>
+    </div>
+
+    <article class="card legal">
+      <div class="legal-head">Hjemmel · styre-vedtatt forsøksprosjekt 2026</div>
+      <ul>
+        <li>Styret vedtar et forsøk hvor en dugnadsavgift dekker fastkostnader + estimert ekstern arbeidskraft for vedlikeholdet.</li>
+        <li><strong>Pott A — bygg-vedlikehold</strong> (maling, takshingel): fordeles etter <em>eierbrøk</em> i tråd med <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">eierseksjonsloven §29 første ledd</a>.</li>
+        <li><strong>Pott B — bruks-nytte</strong> (plen, planter, mat, arbeid): fordeles <em>flatt per seksjon</em>, hjemlet i <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">§29 andre ledd</a> — kostnaden har klar nær sammenheng med faktisk bruk og nytte, og lik nytte for alle gir et klart rimeligere resultat.</li>
+        <li>Avregning skjer som påslag på felleskostnadene fordelt over <em>resten av året</em> (mai–desember 2026).</li>
+        <li>For hver dokumentert dugnadstime refunderes 650 kr til seksjonen.</li>
+        <li>Modellen er nøytral — ingen straff, kun gulrot for deltakelse. Erfaringen evalueres før eventuell videreføring eller forankring i vedtekter.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- PICKER -->
+  <div class="picker">
+    <div class="label">
+      Hvilken<br><em>seksjon?</em>
+    </div>
+    <select id="seksjon-select" aria-label="Velg seksjon">
+      <option value="">— Velg seksjon —</option>
+      <option value="1">Seksjon 1</option>
+      <option value="2">Seksjon 2</option>
+      <option value="3">Seksjon 3</option>
+      <option value="4">Seksjon 4</option>
+      <option value="5">Seksjon 5</option>
+      <option value="6">Seksjon 6</option>
+      <option value="7">Seksjon 7</option>
+      <option value="8">Seksjon 8</option>
+      <option value="9">Seksjon 9</option>
+      <option value="10">Seksjon 10</option>
+      <option value="11">Seksjon 11</option>
+      <option value="12">Seksjon 12</option>
+    </select>
+  </div>
+
+  <!-- TASKS: FORBEREDELSER -->
+  <section class="block">
+    <div class="block-head">
+      <h2><em>Forberedelser</em></h2>
+      <span class="meta">1–3 uker før · ~25 t</span>
+    </div>
+    <p class="block-intro">
+      Disse må unna før selve dugnadshelgen. <em>Avtal tidspunkt med styret</em>
+      når du melder deg på. Takshingel-jobben krever tørrvær.
+    </p>
+    <ul class="tasks" id="tasks-forberedelser"></ul>
+  </section>
+
+  <!-- TASKS: DAG 1 -->
+  <section class="block">
+    <div class="block-head">
+      <h2>Dag 1 · <em>Lørdag</em></h2>
+      <span class="meta">9. mai · ~27 t</span>
+    </div>
+    <p class="block-intro">
+      Våte og skitne oppgaver. Vi river opp den gamle plenen, vasker
+      fellesarealet og klargjør for plantelegging dagen etter.
+    </p>
+    <ul class="tasks" id="tasks-dag1"></ul>
+  </section>
+
+  <!-- TASKS: DAG 2 -->
+  <section class="block">
+    <div class="block-head">
+      <h2>Dag 2 · <em>Søndag</em></h2>
+      <span class="meta">10. mai · ~25 t</span>
+    </div>
+    <p class="block-intro">
+      Tørt og pent. <em>Plenleveransen kommer tidlig om morgenen</em> — vi
+      starter med å rulle ut plenen mens et annet team maler boden.
+    </p>
+    <ul class="tasks" id="tasks-dag2"></ul>
+  </section>
+
+  <!-- TASKS: VAKT -->
+  <section class="block">
+    <div class="block-head">
+      <h2><em>Sprinkler-vakt</em></h2>
+      <span class="meta">Uka etter plenlegging · ~1 t</span>
+    </div>
+    <p class="block-intro">
+      Vi kjøper inn Gardena sirkel-sprinkler + Clas Ohlson digitalt vanningsur.
+      <em>Vakta setter opp uret</em> første dagen og <em>sjekker innom</em>
+      noen ganger i løpet av uka. Hvis mai blir tørr, forleng til uke 20.
+    </p>
+    <ul class="tasks" id="tasks-vakt"></ul>
+  </section>
+
+  <!-- SUBMIT -->
+  <section class="submit">
+    <div class="head">
+      Lagre<br><em>påmelding.</em>
+      <small>Kan endres frem til 2. mai</small>
+    </div>
+
+    <div>
+      <p class="summary" id="submit-summary">Velg seksjon øverst for å starte påmelding.</p>
+      <button class="send" id="submit-btn" disabled>
+        Send inn
+        <svg width="22" height="10" viewBox="0 0 22 10" fill="none">
+          <path d="M0 5 H20 M15 1 L20 5 L15 9" stroke="currentColor" stroke-width="1.4" fill="none"/>
+        </svg>
+      </button>
+      <div id="status" class="status"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>WG18 · Dugnad Q2 2026</span>
+    <span>Spørsmål? Styret</span>
+  </footer>
+
+</main>
+
+<script>
+const APPS_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+const TASKS = {
+  forberedelser: [
+    { id: 'forb-arbeidsleder', name: 'Arbeidsleder — løpende rolle', persons: 1, hours: 2, notes: 'Planlegging, koordinering, oppsett av digital løsning, beboerinfo, koordinering på dugnadsdagene, etterarbeid. Loggført 2 t for oppsett — flere timer kan logges etterhvert.' },
+    { id: 'forb-jordtest', name: 'pH-test + drenasje-test av jord — HASTER', persons: 1, hours: 2, notes: 'Kjøp pH-strips. Mål pH på 3–4 steder. Grav et 30 cm hull, fyll med vann, mål tid for tømming (vurderer leireinnhold). Resultatet styrer hvor mye kalk og grovsand som trengs.' },
+    { id: 'forb-innkjop-maxbo', name: 'Innkjøpsrunde Maxbo — takshingel, maling, diverse', persons: 1, hours: 2, notes: 'Henter takshingel + underlagspapp + mønekam + beslag, maling + grunning + pensler, diverse forbruk (søppelsekker, hansker). Krever bil eller henger.' },
+    { id: 'forb-innkjop-plantebutikk', name: 'Innkjøpsrunde plantebutikk — plen, planter, jord', persons: 1, hours: 2, notes: 'Bestiller ferdigplen til levering morgenen 10. mai. Henter vekstjord, grovsand, hagekalk, oppstartsgjødsel, nye planter, sprinkler + vanningsur, pH-strips. Krever bil eller henger.' },
+    { id: 'forb-kalk', name: 'Kalke jord — HASTER (innen 2. mai)', persons: 1, hours: 1, notes: 'Må skje minst 2 uker før plenlegging (10. mai). Mengde kalk avhenger av pH-test. Spre på det nakne underlaget og vann inn.' },
+    { id: 'forb-spyle-bod', name: 'Høytrykksspyle bod utvendig', persons: 2, hours: 2, notes: 'Helga før dugnaden så treverket rekker å tørke før maling.' },
+    { id: 'forb-takshingel', name: 'Legge ny takshingel på bod (~5 kvm saltak)', persons: 2, hours: 4, notes: 'Heksagonale shingles med overlapp. Riv gammelt belegg, sjekk underlag, legg underlagspapp, shingles fra bunn og opp, mønekam til slutt. Krever tørrvær — gjøres helga før dugnaden.' },
+    { id: 'forb-beskjaere', name: 'Beskjære busker', persons: 2, hours: 2, notes: 'Sjekk fuglenes hekketid før større trær tas.' },
+  ],
+  dag1: [
+    { id: 'd1-rive-plen', name: 'Rive opp gammel plen (28 kvm)', persons: 2, hours: 2.5, notes: 'Tung jobb. Trillebår og gode spader.' },
+    { id: 'd1-grave-planter', name: 'Grave opp visne planter, klargjøre bed', persons: 2, hours: 2, notes: '' },
+    { id: 'd1-jevne-sand', name: 'Jevne underlag + blande inn grovsand mot leire', persons: 2, hours: 2, notes: '20–30 % grovsand i topplaget der jorden er tung.' },
+    { id: 'd1-vekstjord', name: 'Spre vekstjord, rake jevnt, tråkke lett', persons: 2, hours: 1, notes: '' },
+    { id: 'd1-soppel', name: 'Spyle søppelbeholdere (2× 400 L + 1× 200 L)', persons: 1, hours: 1, notes: 'Tre store beholdere — bruk høytrykksspyler.' },
+    { id: 'd1-vaske-stein', name: 'Vaske gulv og steiner i fellesareal', persons: 2, hours: 2, notes: '' },
+    { id: 'd1-ugress', name: 'Ugressluking i bed', persons: 2, hours: 1.5, notes: '' },
+    { id: 'd1-kjokken', name: 'Kjøkkenansvarlig — vafler, kjeks, kaffe', persons: 1, hours: 4, notes: 'Kjøper kjeks, lager vafler (eller noe lignende), brygger kaffe og holder kjøkkenet i orden hele dagen.' },
+  ],
+  dag2: [
+    { id: 'd2-plen', name: 'Legge ferdigplen + skjære kanter + vanne grundig', persons: 3, hours: 2.5, notes: 'Plen leveres tidlig morgen — denne starter først.' },
+    { id: 'd2-plante', name: 'Plante nye planter i bed', persons: 2, hours: 2, notes: '' },
+    { id: 'd2-male-bod', name: 'Male bod', persons: 2, hours: 3.5, notes: 'Forutsetter tørr og forberedt bod fra forberedelses-runden.' },
+    { id: 'd2-kjokken', name: 'Kjøkkenansvarlig — vafler, kjeks, kaffe', persons: 1, hours: 4, notes: 'Kjøper kjeks, lager vafler (eller noe lignende), brygger kaffe og holder kjøkkenet i orden hele dagen.' },
+    { id: 'd2-rydde', name: 'Sluttrydding, vaske verktøy, returnere lånt utstyr', persons: 4, hours: 0.5, notes: 'Alle bidrar siste halvtime.' },
+  ],
+  vakt: [
+    { id: 'vakt-uke1', name: 'Sprinkler-vakt uke 19 (11.–17. mai)', persons: 1, hours: 1, notes: 'Sett opp Gardena sprinkler + vanningsur første dagen (20–30 min). Sjekk innom 2–3 ganger i uka at det fortsatt funker. Starter dagen etter plenen er lagt.' },
+    { id: 'vakt-uke2', name: 'Backup sprinkler-vakt uke 20 (18.–24. mai)', persons: 1, hours: 1, notes: 'Aktiveres kun hvis uke 19 har vært tørr. Justere uret eller forlenge programmet.' },
+  ],
+};
+
+const TOTAL_HOUR_BUDGET = 79;
+const HOURLY_RATE = 650;
+const SECTIONS = 12;
+
+let currentSection = '';
+let allSignups = {};
+let mySelections = new Set();
+
+function taskById(id) {
+  for (const group of Object.values(TASKS)) {
+    const t = group.find(t => t.id === id);
+    if (t) return t;
+  }
+  return null;
+}
+
+function totalHoursPerTask(t) {
+  return t.persons * t.hours;
+}
+
+function renderTasks() {
+  for (const [groupKey, list] of Object.entries(TASKS)) {
+    const container = document.getElementById('tasks-' + groupKey);
+    if (!container) continue;
+    container.innerHTML = '';
+    for (const t of list) {
+      const signups = (allSignups[t.id] || []).slice().sort((a,b) => a-b);
+      const checked = mySelections.has(t.id);
+      const li = document.createElement('li');
+      li.className = 'task' + (checked ? ' checked' : '') + (currentSection ? '' : ' disabled');
+      const personsLabel = t.persons + ' person' + (t.persons > 1 ? 'er' : '');
+      const totalHours = totalHoursPerTask(t);
+      const signupHTML = signups.length === 0
+        ? `<span class="empty">Ingen påmeldt</span>`
+        : `<div class="count"><b>${signups.length}</b>seksjon${signups.length > 1 ? 'er' : ''}</div><div class="who">${signups.join(' · ')}</div>`;
+      li.innerHTML = `
+        <span class="check"></span>
+        <input type="checkbox" ${checked ? 'checked' : ''}>
+        <div class="body">
+          <div class="name">${t.name}</div>
+          <div class="meta">
+            <span>${personsLabel}</span>
+            <span class="sep">·</span>
+            <span>${t.hours} t / person</span>
+            <span class="sep">·</span>
+            <span>${totalHours} t totalt</span>
+          </div>
+          ${t.notes ? `<div class="notes">${t.notes}</div>` : ''}
+        </div>
+        <div class="signups">${signupHTML}</div>
+      `;
+      li.addEventListener('click', () => {
+        if (!currentSection) return;
+        if (mySelections.has(t.id)) mySelections.delete(t.id);
+        else mySelections.add(t.id);
+        renderTasks();
+        updateSubmitBar();
+      });
+      container.appendChild(li);
+    }
+  }
+}
+
+function updateBudgetCards() {
+  let covered = 0;
+  const allTasks = Object.values(TASKS).flat();
+  const signedUpTaskIds = new Set(Object.keys(allSignups).filter(id => (allSignups[id] || []).length > 0));
+  for (const t of allTasks) {
+    if (signedUpTaskIds.has(t.id)) covered += totalHoursPerTask(t);
+  }
+  const rest = Math.max(0, TOTAL_HOUR_BUDGET - covered);
+  const restCost = rest * HOURLY_RATE;
+  const pct = Math.round((covered / TOTAL_HOUR_BUDGET) * 100);
+
+  document.getElementById('coverage-hours').textContent = covered + ' t';
+  document.getElementById('coverage-pct').textContent = pct + ' % av 79 t plukket';
+  document.getElementById('rest-amount').textContent = restCost.toLocaleString('nb-NO');
+  document.getElementById('rest-hours').textContent = rest + ' t må kjøpes inn';
+
+  const seksjonerMedPaameldelse = new Set();
+  for (const list of Object.values(allSignups)) {
+    for (const s of list) seksjonerMedPaameldelse.add(s);
+  }
+  const ikkePaameldte = [];
+  for (let i = 1; i <= SECTIONS; i++) {
+    if (!seksjonerMedPaameldelse.has(i)) ikkePaameldte.push(i);
+  }
+  const list = document.getElementById('non-signup-list');
+  if (ikkePaameldte.length === 0) {
+    list.textContent = 'ingen — alle har meldt seg på minst én oppgave';
+  } else if (ikkePaameldte.length === SECTIONS) {
+    list.textContent = 'alle 12';
+  } else {
+    list.textContent = ikkePaameldte.join(' · ') + ' (' + ikkePaameldte.length + ' stk)';
+  }
+}
+
+function updateSubmitBar() {
+  const summary = document.getElementById('submit-summary');
+  const btn = document.getElementById('submit-btn');
+  if (!currentSection) {
+    summary.innerHTML = 'Velg seksjon øverst for å starte påmelding.';
+    btn.disabled = true;
+    return;
+  }
+  const myHours = [...mySelections]
+    .map(id => taskById(id))
+    .filter(Boolean)
+    .reduce((sum, t) => sum + totalHoursPerTask(t), 0);
+  const myRefund = myHours * HOURLY_RATE;
+  if (mySelections.size === 0) {
+    summary.innerHTML = `<span class="seksjon-tag">Seksjon ${currentSection}</span>Hak av oppgavene du tar ansvar for.`;
+  } else {
+    summary.innerHTML = `<span class="seksjon-tag">Seksjon ${currentSection}</span>${mySelections.size} oppgave${mySelections.size === 1 ? '' : 'r'} valgt — <em>~${myHours} t arbeid</em>, refusjon <b>${myRefund.toLocaleString('nb-NO')} kr</b>.`;
+  }
+  btn.disabled = false;
+}
+
+function showStatus(msg, ok) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = 'status ' + (ok ? 'success' : 'error');
+  if (ok) setTimeout(() => { el.className = 'status'; }, 4000);
+}
+
+async function loadSignups() {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('PASTE_')) {
+    console.warn('Apps Script URL er ikke konfigurert — påmeldinger lagres ikke.');
+    return;
+  }
+  try {
+    const res = await fetch(APPS_SCRIPT_URL);
+    const data = await res.json();
+    allSignups = data.signups || {};
+  } catch (err) {
+    console.error('Kunne ikke laste påmeldinger:', err);
+  }
+}
+
+async function saveSelections() {
+  if (!currentSection) return;
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  const original = btn.innerHTML;
+  btn.innerHTML = 'Lagrer…';
+
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('PASTE_')) {
+    showStatus('Apps Script URL er ikke konfigurert. Be styret sette opp backend først.', false);
+    btn.disabled = false;
+    btn.innerHTML = original;
+    return;
+  }
+
+  try {
+    const body = {
+      seksjon: parseInt(currentSection, 10),
+      oppgaver: [...mySelections],
+    };
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+    });
+    showStatus(`Påmelding lagret for seksjon ${currentSection}.`, true);
+    setTimeout(async () => {
+      await loadSignups();
+      renderTasks();
+      updateBudgetCards();
+    }, 800);
+  } catch (err) {
+    console.error(err);
+    showStatus('Lagring feilet. Prøv igjen eller kontakt styret.', false);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
+}
+
+function onSectionChange(e) {
+  currentSection = e.target.value;
+  mySelections = new Set();
+  if (currentSection) {
+    const seksjonNr = parseInt(currentSection, 10);
+    for (const [taskId, list] of Object.entries(allSignups)) {
+      if ((list || []).includes(seksjonNr)) mySelections.add(taskId);
+    }
+  }
+  renderTasks();
+  updateSubmitBar();
+}
+
+document.getElementById('seksjon-select').addEventListener('change', onSectionChange);
+document.getElementById('submit-btn').addEventListener('click', saveSelections);
+
+(async () => {
+  await loadSignups();
+  renderTasks();
+  updateBudgetCards();
+  updateSubmitBar();
+})();
+</script>
+</body>
+</html>
