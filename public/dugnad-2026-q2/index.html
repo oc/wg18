@@ -533,7 +533,7 @@
   <section class="block" id="budget">
     <div class="block-head">
       <h2>Budsjett &amp; <em>modell</em></h2>
-      <span class="meta">12 seksjoner · 79 t arbeid</span>
+      <span class="meta">12 seksjoner · 75 t arbeid</span>
     </div>
     <p class="block-intro">
       Hver seksjon faktureres en lik dugnadsavgift som dekker materialer,
@@ -572,23 +572,23 @@
       <div class="stat-stack">
         <div class="stat">
           <div class="label">Total ramme</div>
-          <div class="value"><em>69 900</em></div>
-          <div class="sub">fastkostnader + arbeidsbudsjett (79 t × 650 kr)</div>
+          <div class="value"><em>67 300</em></div>
+          <div class="sub">fastkostnader + arbeidsbudsjett (75 t × 650 kr)</div>
         </div>
         <div class="stat">
           <div class="label">Per seksjon · før refusjon</div>
-          <div class="value"><em>5 535–6 068</em></div>
+          <div class="value"><em>5 319–5 852</em></div>
           <div class="sub">spennvidde etter to-pott-fordeling (Modell B)</div>
         </div>
         <div class="stat">
           <div class="label">Påmeldt arbeid</div>
           <div class="value good"><em id="coverage-hours">0 t</em></div>
-          <div class="sub" id="coverage-pct">0 % av 79 t plukket</div>
+          <div class="sub" id="coverage-pct">0 % av 75 t plukket</div>
         </div>
         <div class="stat">
           <div class="label">Restbudsjett · ekstern hjelp</div>
-          <div class="value warn"><em id="rest-amount">51 350</em></div>
-          <div class="sub" id="rest-hours">79 t må kjøpes inn</div>
+          <div class="value warn"><em id="rest-amount">48 750</em></div>
+          <div class="sub" id="rest-hours">75 t må kjøpes inn</div>
         </div>
       </div>
     </div>
@@ -636,7 +636,7 @@
   <section class="block">
     <div class="block-head">
       <h2><em>Forberedelser</em></h2>
-      <span class="meta">1–3 uker før · ~25 t</span>
+      <span class="meta">1–3 uker før · ~29 t</span>
     </div>
     <p class="block-intro">
       Disse må unna før selve dugnadshelgen. <em>Avtal tidspunkt med styret</em>
@@ -649,7 +649,7 @@
   <section class="block">
     <div class="block-head">
       <h2>Dag 1 · <em>Lørdag</em></h2>
-      <span class="meta">9. mai · ~27 t</span>
+      <span class="meta">9. mai · ~23 t</span>
     </div>
     <p class="block-intro">
       Våte og skitne oppgaver. Vi river opp den gamle plenen, vasker
@@ -662,7 +662,7 @@
   <section class="block">
     <div class="block-head">
       <h2>Dag 2 · <em>Søndag</em></h2>
-      <span class="meta">10. mai · ~25 t</span>
+      <span class="meta">10. mai · ~21 t</span>
     </div>
     <p class="block-intro">
       Tørt og pent. <em>Plenleveransen kommer tidlig om morgenen</em> — vi
@@ -723,11 +723,10 @@ const TASKS = {
     { id: 'forb-kalk', name: 'Kalke jord — HASTER (innen 2. mai)', persons: 1, hours: 1, notes: 'Må skje minst 2 uker før plenlegging (10. mai). Mengde kalk avhenger av pH-test. Spre på det nakne underlaget og vann inn.' },
     { id: 'forb-spyle-bod', name: 'Høytrykksspyle bod utvendig', persons: 2, hours: 2, notes: 'Helga før dugnaden så treverket rekker å tørke før maling.' },
     { id: 'forb-takshingel', name: 'Legge ny takshingel på bod (~5 kvm saltak)', persons: 2, hours: 4, notes: 'Heksagonale shingles med overlapp. Riv gammelt belegg, sjekk underlag, legg underlagspapp, shingles fra bunn og opp, mønekam til slutt. Krever tørrvær — gjøres helga før dugnaden.' },
-    { id: 'forb-beskjaere', name: 'Beskjære busker', persons: 2, hours: 2, notes: 'Sjekk fuglenes hekketid før større trær tas.' },
+    { id: 'forb-plantejobb', name: 'Beskjære busker, grave opp visne planter, plante nye', persons: 2, hours: 4, notes: 'Samlet plante-jobb: beskjæring (sjekk hekketid), fjerning av visne planter, klargjøring av bed, planting av nye. Kan gjøres samlet på en dag før eller under dugnadshelgen.' },
   ],
   dag1: [
     { id: 'd1-rive-plen', name: 'Rive opp gammel plen (28 kvm)', persons: 2, hours: 2.5, notes: 'Tung jobb. Trillebår og gode spader.' },
-    { id: 'd1-grave-planter', name: 'Grave opp visne planter, klargjøre bed', persons: 2, hours: 2, notes: '' },
     { id: 'd1-jevne-sand', name: 'Jevne underlag + blande inn grovsand mot leire', persons: 2, hours: 2, notes: '20–30 % grovsand i topplaget der jorden er tung.' },
     { id: 'd1-vekstjord', name: 'Spre vekstjord, rake jevnt, tråkke lett', persons: 2, hours: 1, notes: '' },
     { id: 'd1-soppel', name: 'Spyle søppelbeholdere (2× 400 L + 1× 200 L)', persons: 1, hours: 1, notes: 'Tre store beholdere — bruk høytrykksspyler.' },
@@ -737,7 +736,6 @@ const TASKS = {
   ],
   dag2: [
     { id: 'd2-plen', name: 'Legge ferdigplen + skjære kanter + vanne grundig', persons: 3, hours: 2.5, notes: 'Plen leveres tidlig morgen — denne starter først.' },
-    { id: 'd2-plante', name: 'Plante nye planter i bed', persons: 2, hours: 2, notes: '' },
     { id: 'd2-male-bod', name: 'Male bod', persons: 2, hours: 3.5, notes: 'Forutsetter tørr og forberedt bod fra forberedelses-runden.' },
     { id: 'd2-kjokken', name: 'Kjøkkenansvarlig — vafler, kjeks, kaffe', persons: 1, hours: 4, notes: 'Kjøper kjeks, lager vafler (eller noe lignende), brygger kaffe og holder kjøkkenet i orden hele dagen.' },
     { id: 'd2-rydde', name: 'Sluttrydding, vaske verktøy, returnere lånt utstyr', persons: 4, hours: 0.5, notes: 'Alle bidrar siste halvtime.' },
@@ -748,7 +746,7 @@ const TASKS = {
   ],
 };
 
-const TOTAL_HOUR_BUDGET = 79;
+const TOTAL_HOUR_BUDGET = 75;
 const HOURLY_RATE = 650;
 const SECTIONS = 12;
 
@@ -823,7 +821,7 @@ function updateBudgetCards() {
   const pct = Math.round((covered / TOTAL_HOUR_BUDGET) * 100);
 
   document.getElementById('coverage-hours').textContent = covered + ' t';
-  document.getElementById('coverage-pct').textContent = pct + ' % av 79 t plukket';
+  document.getElementById('coverage-pct').textContent = pct + ' % av 75 t plukket';
   document.getElementById('rest-amount').textContent = restCost.toLocaleString('nb-NO');
   document.getElementById('rest-hours').textContent = rest + ' t må kjøpes inn';
 
