@@ -19,6 +19,8 @@ Statisk HTML-side med Google Sheets som "database" via Apps Script.
    - A1: `timestamp`
    - B1: `seksjon`
    - C1: `oppgave_id`
+   - D1: `status`
+   - E1: `notat`
 5. Kopier Sheet-ID fra URL-en — det er strengen mellom `/d/` og `/edit`:
    `docs.google.com/spreadsheets/d/`**`DENNE_DELEN`**`/edit`
 
@@ -32,7 +34,7 @@ Statisk HTML-side med Google Sheets som "database" via Apps Script.
    - Type: **Web-app**
    - Beskrivelse: `Dugnad 2026 Q2 backend`
    - Utfør som: **Meg**
-   - Hvem har tilgang: **Alle** (eller "Alle med Google-konto" hvis du vil binde til innlogging)
+   - Hvem har tilgang: **Alle**
 6. Klikk **Distribuer**, autoriser tilgang
 7. Kopier **Web-app URL**-en (slutter med `/exec`)
 
@@ -48,25 +50,30 @@ Bytt ut med URL-en fra steg 2.7.
 
 ### 4. Publiser siden
 
-Tre alternativer, sortert etter enkelhet:
-
-- **GitHub Pages**: push filene til et repo, slå på Pages i innstillinger
-- **Netlify Drop**: dra mappen til [app.netlify.com/drop](https://app.netlify.com/drop)
+- **Cloudflare**: prosjektet er allerede konfigurert via `wrangler.toml` i parent-mappen
 - **Lokal test**: `python3 -m http.server 8000` i mappen, åpne `http://localhost:8000`
+
+## Modell · kostnadsbesparelse
+
+Vedlikeholdsarbeidet dekkes via felleskostnadene som vanlig (eierbrøk, [eierseksjonsloven §29](https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729)). Dugnaden er frivillig og **kollektiv** — hver utført time sparer sameiet 650 kr i ekstern arbeidskraft, og besparelsen brukes til å forklare neste felleskostnads-justering.
+
+## Styret-workflow etter dugnaden
+
+Sheet-et er den autoritative kilden. Etter dugnaden åpner styret Google Sheet-et og redigerer direkte:
+
+| Kolonne | Ved påmelding | Etter dugnad (styret oppdaterer) |
+|---|---|---|
+| **D · status** | `påmeldt` | `fullført` eller `ikke møtt` |
+| **B · seksjon** | seksjon som meldte seg på | endre hvis annen seksjon faktisk utførte arbeidet |
+| **E · notat** | tom | fri tekst (f.eks. faktiske timer, kvalitet, kommentar) |
+
+Siden viser status fortløpende:
+- `fullført` → grønn merket task med ✓-symbol
+- `påmeldt` → standard tellermerke
+- `ikke møtt` → vises med rød overstrek
+
+Re-påmeldinger fra en seksjon overstyrer kun rader med status `påmeldt` — styre-bekreftet arbeid bevares.
 
 ## Endre oppgaver eller budsjett
 
-Alt ligger i `index.html` — søk etter `const TASKS` for oppgavelisten, og `FIXED_COSTS` / `TOTAL_HOUR_BUDGET` / `HOURLY_RATE` for økonomien.
-
-## Juridisk grunnlag for fakturering
-
-Modellen baserer seg på **eierseksjonsloven §29** om felleskostnader og krever vedtak på årsmøte:
-
-> Sameiet vedtar en dugnadsavgift som dekker materialer + estimert kostnad
-> ved ekstern arbeidskraft for vedlikeholdsoppgaver. Avgiften fordeles likt
-> per seksjon. Seksjoner som dokumenterer arbeidstimer på dugnad refunderes
-> med 650 kr per time.
-
-Modellen er nøytral (ikke straff) og rettferdig (gulrot), og er etablert praksis i mange norske sameier.
-
-**Anbefalt:** ta inn formuleringen i vedtektene under "Felleskostnader og dugnad" på neste årsmøte for varig hjemmel.
+Alt ligger i `index.html` — søk etter `const TASKS` for oppgavelisten, og `TOTAL_HOUR_BUDGET` / `HOURLY_RATE` for økonomien.

@@ -264,12 +264,19 @@
     box-shadow: 10px 12px 0 -1px rgba(26,20,17,.18);
     display:grid;
     grid-template-columns:auto 1fr;
-    gap:24px;
+    gap:18px 24px;
     align-items:center;
   }
   @media (max-width:640px){
     .picker{grid-template-columns:1fr;gap:14px;position:static}
   }
+  /* task status indicators */
+  .task.done{background:#E5EDD9;box-shadow:inset 4px 0 0 var(--moss)}
+  .task.done .name::before{
+    content:"✓ ";color:var(--moss);font-weight:500;
+  }
+  .task .signups .count.done b{color:var(--moss)}
+  .task .signups .count.noshow b{color:var(--rust);text-decoration:line-through}
   .picker .label{
     font-family:"JetBrains Mono",monospace;
     font-size:10px;letter-spacing:.22em;text-transform:uppercase;
@@ -508,87 +515,89 @@
 
   <p class="lede">
     De fleste oppgavene kan utføres <em>når det passer</em> — ikke kun på
-    dugnadshelgen. To unntak: <em>kalking</em> og <em>plenlegging</em> må
-    skje med minst 2 ukers mellomrom for at den nye plenen skal trives.
+    dugnaddagene. Noen oppgaver er definert som <em>langtidsaktiviteter</em>
+    og strekker seg over flere uker. To unntak: <em>kalking</em> og
+    <em>plenlegging</em> må skje med minst 2 ukers mellomrom.
   </p>
 
   <p class="lede">
-    Det som ikke blir plukket, må kjøpes inn eksternt — og restbudsjettet
-    fordeles på alle seksjonene. Modellen er et <em>styre-vedtatt
-    forsøksprosjekt</em> for 2026, hjemlet i <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">eierseksjonsloven §29</a>. Årets forsøk avregnes
-    på felleskostnadene fordelt over <em>resten av året</em> (mai–desember).
+    Felleskostnadene må <em>uansett</em> dekke dette arbeidet. Når du
+    bidrar på dugnaden, sparer sameiet det vi ellers ville brukt på ekstern
+    arbeidskraft — som igjen betyr <em>mindre å justere opp</em> ved neste
+    felleskostnads-økning. Hver dugnadstime er verdt 650 kr i besparelse
+    for fellesskapet.
   </p>
 
   <div class="ribbon">
-    <span>Lørdag 9. mai</span>
+    <span>Tirsdag 12. mai</span>
     <span class="dot"></span>
-    <span>Søndag 10. mai</span>
+    <span>Onsdag 13. mai</span>
     <span class="dot"></span>
-    <span>10:00–15:00</span>
+    <span>17:00–21:00</span>
     <span class="dot"></span>
-    <span>Påmeldingsfrist 2. mai</span>
+    <span>Påmeldingsfrist 5. mai</span>
   </div>
 
   <!-- BUDGET -->
   <section class="block" id="budget">
     <div class="block-head">
       <h2>Budsjett &amp; <em>modell</em></h2>
-      <span class="meta">12 seksjoner · 75 t arbeid</span>
+      <span class="meta">12 seksjoner · 109 t arbeid</span>
     </div>
     <p class="block-intro">
-      Hver seksjon faktureres en lik dugnadsavgift som dekker materialer,
-      mat &amp; drikke — og estimert kostnad ved å kjøpe inn arbeidskraft
-      til oppgavene som ingen melder seg på.
-      <em>For hver dokumentert dugnadstime refunderes 650 kr.</em>
+      Materialene koster det de koster — og må uansett dekkes via felleskostnadene.
+      Det <em>store potensialet</em> er arbeidet: 109 timer som ellers må kjøpes
+      inn til 650 kr/t. Hver time fylt på dugnaden er <em>650 kr spart</em> for
+      sameiet, og blir dokumentert i regnskapet før neste felleskostnads-justering.
     </p>
 
     <div class="budget-grid">
       <div>
         <table class="budget-table">
           <thead>
-            <tr><th>Fastkostnader</th><th class="num">Kr</th><th class="num">Pott</th></tr>
+            <tr><th>Fastkostnader (dekkes uansett)</th><th class="num">Kr</th></tr>
           </thead>
           <tbody>
-            <tr><td>Ferdigplen 28 kvm + frakt</td><td class="num">3 500</td><td class="num">B</td></tr>
-            <tr><td>Vekstjord ~2 m³</td><td class="num">3 000</td><td class="num">B</td></tr>
-            <tr><td>Grovsand mot leirjord</td><td class="num">500</td><td class="num">B</td></tr>
-            <tr><td>Hagekalk + oppstartsgjødsel</td><td class="num">350</td><td class="num">B</td></tr>
-            <tr><td>Maling, grunning, pensler</td><td class="num">2 500</td><td class="num">A</td></tr>
-            <tr><td>Takshingel, underlagspapp, mønekam, beslag</td><td class="num">2 500</td><td class="num">A</td></tr>
-            <tr><td>Nye planter</td><td class="num">2 000</td><td class="num">B</td></tr>
-            <tr><td>Gardena sprinkler + vanningsur (Clas Ohlson)</td><td class="num">700</td><td class="num">B</td></tr>
-            <tr><td>pH-strips + drenasje-test</td><td class="num">200</td><td class="num">B</td></tr>
-            <tr><td>Diverse forbruk</td><td class="num">800</td><td class="num">B</td></tr>
-            <tr class="subtotal"><td>Materialer</td><td class="num">16 050</td><td class="num"></td></tr>
-            <tr><td>Mat &amp; drikke begge dager</td><td class="num">2 500</td><td class="num">B</td></tr>
-            <tr class="total"><td>Sum fastkostnader</td><td class="num">18 550</td><td class="num"></td></tr>
+            <tr><td>Ferdigplen 28 kvm + frakt</td><td class="num">3 500</td></tr>
+            <tr><td>Vekstjord ~2 m³</td><td class="num">3 000</td></tr>
+            <tr><td>Grovsand mot leirjord</td><td class="num">500</td></tr>
+            <tr><td>Hagekalk + oppstartsgjødsel</td><td class="num">350</td></tr>
+            <tr><td>Maling, grunning, pensler</td><td class="num">2 500</td></tr>
+            <tr><td>Takshingel, underlagspapp, mønekam, beslag</td><td class="num">2 500</td></tr>
+            <tr><td>Nye planter</td><td class="num">2 000</td></tr>
+            <tr><td>Gardena sprinkler + vanningsur (Clas Ohlson)</td><td class="num">700</td></tr>
+            <tr><td>pH-strips + drenasje-test</td><td class="num">200</td></tr>
+            <tr><td>Diverse forbruk</td><td class="num">800</td></tr>
+            <tr class="subtotal"><td>Materialer</td><td class="num">16 050</td></tr>
+            <tr><td>Mat &amp; drikke begge dager</td><td class="num">2 500</td></tr>
+            <tr class="total"><td>Sum fastkostnader</td><td class="num">18 550</td></tr>
           </tbody>
         </table>
         <p style="margin-top:14px;font-style:italic;font-weight:380;font-variation-settings:'opsz' 14;font-size:13px;color:var(--ink-soft);line-height:1.5">
-          Pott <em>A</em> · bygg-vedlikehold (eierbrøk) · Pott <em>B</em> · bruks-nytte (flat 1/12)
+          Disse må dekkes <em>uansett</em>. Materialer + mat &amp; drikke går inn i felleskostnadene som vanlig.
         </p>
       </div>
 
       <div class="stat-stack">
         <div class="stat">
-          <div class="label">Total ramme</div>
-          <div class="value"><em>67 300</em></div>
-          <div class="sub">fastkostnader + arbeidsbudsjett (75 t × 650 kr)</div>
+          <div class="label">Materialer · alltid</div>
+          <div class="value"><em>18 550</em></div>
+          <div class="sub">felleskostnader dekker dette uansett</div>
         </div>
         <div class="stat">
-          <div class="label">Per seksjon · før refusjon</div>
-          <div class="value"><em>5 319–5 852</em></div>
-          <div class="sub">spennvidde etter to-pott-fordeling (Modell B)</div>
+          <div class="label">Arbeidsverdi · potensiell besparelse</div>
+          <div class="value"><em>70 850</em></div>
+          <div class="sub">109 t × 650 kr — kjøpes inn hvis ingen tar det</div>
         </div>
         <div class="stat">
-          <div class="label">Påmeldt arbeid</div>
-          <div class="value good"><em id="coverage-hours">0 t</em></div>
-          <div class="sub" id="coverage-pct">0 % av 75 t plukket</div>
+          <div class="label">Spart så langt</div>
+          <div class="value good"><em id="coverage-amount">0</em></div>
+          <div class="sub" id="coverage-pct">0 t påmeldt av 109 t totalt</div>
         </div>
         <div class="stat">
-          <div class="label">Restbudsjett · ekstern hjelp</div>
-          <div class="value warn"><em id="rest-amount">48 750</em></div>
-          <div class="sub" id="rest-hours">75 t må kjøpes inn</div>
+          <div class="label">Må kjøpes inn eksternt</div>
+          <div class="value warn"><em id="rest-amount">70 850</em></div>
+          <div class="sub" id="rest-hours">109 t mangler</div>
         </div>
       </div>
     </div>
@@ -598,14 +607,13 @@
     </div>
 
     <article class="card legal">
-      <div class="legal-head">Hjemmel · styre-vedtatt forsøksprosjekt 2026</div>
+      <div class="legal-head">Modell · kostnadsbesparelse for sameiet</div>
       <ul>
-        <li>Styret vedtar et forsøk hvor en dugnadsavgift dekker fastkostnader + estimert ekstern arbeidskraft for vedlikeholdet.</li>
-        <li><strong>Pott A — bygg-vedlikehold</strong> (maling, takshingel): fordeles etter <em>eierbrøk</em> i tråd med <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">eierseksjonsloven §29 første ledd</a>.</li>
-        <li><strong>Pott B — bruks-nytte</strong> (plen, planter, mat, arbeid): fordeles <em>flatt per seksjon</em>, hjemlet i <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">§29 andre ledd</a> — kostnaden har klar nær sammenheng med faktisk bruk og nytte, og lik nytte for alle gir et klart rimeligere resultat.</li>
-        <li>Avregning skjer som påslag på felleskostnadene fordelt over <em>resten av året</em> (mai–desember 2026).</li>
-        <li>For hver dokumentert dugnadstime refunderes 650 kr til seksjonen.</li>
-        <li>Modellen er nøytral — ingen straff, kun gulrot for deltakelse. Erfaringen evalueres før eventuell videreføring eller forankring i vedtekter.</li>
+        <li>Vedlikeholdsarbeidet er <em>fellessamiets</em> arbeid og dekkes via felleskostnadene som vanlig — fordelt etter eierbrøk i tråd med <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">eierseksjonsloven §29</a>.</li>
+        <li>Deltakelse på dugnaden er <em>frivillig</em>. Hver utført dugnadstime sparer sameiet 650 kr i ekstern arbeidskraft.</li>
+        <li>Total potensiell besparelse: <strong>70 850 kr</strong> ved full oppslutning. Sparing dokumenteres i regnskapet og brukes som grunnlag for å forklare neste felleskostnads-justering.</li>
+        <li>Ingen individuell refusjon eller pott-fordeling i år — modellen er <em>kollektiv</em>: arbeid utført av en, kommer alle til gode gjennom felleskostnadene.</li>
+        <li>Påmelding er en intensjonserklæring. Styret bekrefter fullført arbeid i etterkant og fører inn faktiske timer.</li>
       </ul>
     </article>
   </section>
@@ -636,7 +644,7 @@
   <section class="block">
     <div class="block-head">
       <h2><em>Forberedelser</em></h2>
-      <span class="meta">1–3 uker før · ~29 t</span>
+      <span class="meta">1–3 uker før · ~37 t</span>
     </div>
     <p class="block-intro">
       Disse må unna før selve dugnadshelgen. <em>Avtal tidspunkt med styret</em>
@@ -648,8 +656,8 @@
   <!-- TASKS: DAG 1 -->
   <section class="block">
     <div class="block-head">
-      <h2>Dag 1 · <em>Lørdag</em></h2>
-      <span class="meta">9. mai · ~23 t</span>
+      <h2>Dag 1 · <em>Tirsdag</em></h2>
+      <span class="meta">12. mai · 17–21 · ~27 t</span>
     </div>
     <p class="block-intro">
       Våte og skitne oppgaver. Vi river opp den gamle plenen, vasker
@@ -661,14 +669,28 @@
   <!-- TASKS: DAG 2 -->
   <section class="block">
     <div class="block-head">
-      <h2>Dag 2 · <em>Søndag</em></h2>
-      <span class="meta">10. mai · ~21 t</span>
+      <h2>Dag 2 · <em>Onsdag</em></h2>
+      <span class="meta">13. mai · 17–21 · ~21 t</span>
     </div>
     <p class="block-intro">
       Tørt og pent. <em>Plenleveransen kommer tidlig om morgenen</em> — vi
       starter med å rulle ut plenen mens et annet team maler boden.
     </p>
     <ul class="tasks" id="tasks-dag2"></ul>
+  </section>
+
+  <!-- TASKS: LANGTID -->
+  <section class="block">
+    <div class="block-head">
+      <h2><em>Langtidsaktiviteter</em></h2>
+      <span class="meta">Strekker seg over uker/måneder · ~22 t</span>
+    </div>
+    <p class="block-intro">
+      Større prosjekter som <em>ikke trenger fullføres på dugnaddagene</em>.
+      Kan deles på flere økter, gjerne i samarbeid mellom flere seksjoner.
+      Spesielt godt egnet for de som ikke kan møte 12.–13. mai.
+    </p>
+    <ul class="tasks" id="tasks-langtid"></ul>
   </section>
 
   <!-- TASKS: VAKT -->
@@ -689,7 +711,7 @@
   <section class="submit">
     <div class="head">
       Lagre<br><em>påmelding.</em>
-      <small>Kan endres frem til 2. mai</small>
+      <small>Kan endres frem til 5. mai</small>
     </div>
 
     <div>
@@ -719,10 +741,12 @@ const TASKS = {
     { id: 'forb-arbeidsleder', name: 'Arbeidsleder — løpende rolle', persons: 1, hours: 2, notes: 'Planlegging, koordinering, oppsett av digital løsning, beboerinfo, koordinering på dugnadsdagene, etterarbeid. Loggført 2 t for oppsett — flere timer kan logges etterhvert.' },
     { id: 'forb-jordtest', name: 'pH-test + drenasje-test av jord — HASTER', persons: 1, hours: 2, notes: 'Kjøp pH-strips. Mål pH på 3–4 steder. Grav et 30 cm hull, fyll med vann, mål tid for tømming (vurderer leireinnhold). Resultatet styrer hvor mye kalk og grovsand som trengs.' },
     { id: 'forb-innkjop-maxbo', name: 'Innkjøpsrunde Maxbo — takshingel, maling, diverse', persons: 1, hours: 2, notes: 'Henter takshingel + underlagspapp + mønekam + beslag, maling + grunning + pensler, diverse forbruk (søppelsekker, hansker). Krever bil eller henger.' },
-    { id: 'forb-innkjop-plantebutikk', name: 'Innkjøpsrunde plantebutikk — plen, planter, jord', persons: 1, hours: 2, notes: 'Bestiller ferdigplen til levering morgenen 10. mai. Henter vekstjord, grovsand, hagekalk, oppstartsgjødsel, nye planter, sprinkler + vanningsur, pH-strips. Krever bil eller henger.' },
+    { id: 'forb-innkjop-plantebutikk', name: 'Innkjøpsrunde plantebutikk — plen, planter, jord', persons: 1, hours: 2, notes: 'Bestiller ferdigplen til levering 13. mai (rett før dugnaden starter kl 17). Henter vekstjord, grovsand, hagekalk, oppstartsgjødsel, nye planter, sprinkler + vanningsur, pH-strips. Krever bil eller henger.' },
+    { id: 'forb-bod-plan', name: 'Bygge bod — planleggingsprosess', persons: 1, hours: 4, notes: 'Innhente tilbud på materialer, lage skisser, koordinere med murarbeider på gavl. Selve byggingen starter etter at murarbeidet er ferdig — kommer som egen dugnadsoppgave senere.' },
+    { id: 'forb-rydde-maling', name: 'Rydde og kaste gammel maling fra gang og kjeller', persons: 2, hours: 2, notes: 'Sortér: malingsspann og rester må til miljøstasjon (spesialavfall). Annet søppel som restavfall.' },
     { id: 'forb-kalk', name: 'Kalke jord — HASTER (innen 2. mai)', persons: 1, hours: 1, notes: 'Må skje minst 2 uker før plenlegging (10. mai). Mengde kalk avhenger av pH-test. Spre på det nakne underlaget og vann inn.' },
     { id: 'forb-spyle-bod', name: 'Høytrykksspyle bod utvendig', persons: 2, hours: 2, notes: 'Helga før dugnaden så treverket rekker å tørke før maling.' },
-    { id: 'forb-takshingel', name: 'Legge ny takshingel på bod (~5 kvm saltak)', persons: 2, hours: 4, notes: 'Heksagonale shingles med overlapp. Riv gammelt belegg, sjekk underlag, legg underlagspapp, shingles fra bunn og opp, mønekam til slutt. Krever tørrvær — gjøres helga før dugnaden.' },
+    { id: 'forb-takshingel', name: 'Legge ny takshingel på bod (~5 kvm saltak)', persons: 2, hours: 4, notes: 'Heksagonale shingles med overlapp. Riv gammelt belegg, sjekk underlag, legg underlagspapp, shingles fra bunn og opp, mønekam til slutt. Krever tørrvær — gjøres en dag i forkant.' },
     { id: 'forb-plantejobb', name: 'Beskjære busker, grave opp visne planter, plante nye', persons: 2, hours: 4, notes: 'Samlet plante-jobb: beskjæring (sjekk hekketid), fjerning av visne planter, klargjøring av bed, planting av nye. Kan gjøres samlet på en dag før eller under dugnadshelgen.' },
   ],
   dag1: [
@@ -730,6 +754,7 @@ const TASKS = {
     { id: 'd1-jevne-sand', name: 'Jevne underlag + blande inn grovsand mot leire', persons: 2, hours: 2, notes: '20–30 % grovsand i topplaget der jorden er tung.' },
     { id: 'd1-vekstjord', name: 'Spre vekstjord, rake jevnt, tråkke lett', persons: 2, hours: 1, notes: '' },
     { id: 'd1-soppel', name: 'Spyle søppelbeholdere (2× 400 L + 1× 200 L)', persons: 1, hours: 1, notes: 'Tre store beholdere — bruk høytrykksspyler.' },
+    { id: 'd1-vaske-bakgard', name: 'Høytrykksspyle nederste del av vegger i bakgård', persons: 2, hours: 2, notes: 'Spyle vekk skitt og alger fra nederste del av bakgårdsveggen. Vurder veggmateriale (puss, mur, panel) før trykk velges.' },
     { id: 'd1-vaske-stein', name: 'Vaske gulv og steiner i fellesareal', persons: 2, hours: 2, notes: '' },
     { id: 'd1-ugress', name: 'Ugressluking i bed', persons: 2, hours: 1.5, notes: '' },
     { id: 'd1-kjokken', name: 'Kjøkkenansvarlig — vafler, kjeks, kaffe', persons: 1, hours: 4, notes: 'Kjøper kjeks, lager vafler (eller noe lignende), brygger kaffe og holder kjøkkenet i orden hele dagen.' },
@@ -740,13 +765,17 @@ const TASKS = {
     { id: 'd2-kjokken', name: 'Kjøkkenansvarlig — vafler, kjeks, kaffe', persons: 1, hours: 4, notes: 'Kjøper kjeks, lager vafler (eller noe lignende), brygger kaffe og holder kjøkkenet i orden hele dagen.' },
     { id: 'd2-rydde', name: 'Sluttrydding, vaske verktøy, returnere lånt utstyr', persons: 4, hours: 0.5, notes: 'Alle bidrar siste halvtime.' },
   ],
+  langtid: [
+    { id: 'lang-gelender', name: 'Pusse + male gelender i trapperom (5 etasjer, spiraltrapp)', persons: 2, hours: 8, notes: 'Stor jobb. Pusse av løs gammel maling, primer, 2 strøk maling. Kan deles på flere helger over flere måneder. 16 t totalt.' },
+    { id: 'lang-sparkle', name: 'Sparkle skader i vegger, portrom, fellesarealer', persons: 1, hours: 6, notes: 'Identifiser skader, sparkle, slip jevn, mal over hvis nødvendig. Trinn-vis arbeid over tid.' },
+  ],
   vakt: [
-    { id: 'vakt-uke1', name: 'Sprinkler-vakt uke 19 (11.–17. mai)', persons: 1, hours: 1, notes: 'Sett opp Gardena sprinkler + vanningsur første dagen (20–30 min). Sjekk innom 2–3 ganger i uka at det fortsatt funker. Starter dagen etter plenen er lagt.' },
-    { id: 'vakt-uke2', name: 'Backup sprinkler-vakt uke 20 (18.–24. mai)', persons: 1, hours: 1, notes: 'Aktiveres kun hvis uke 19 har vært tørr. Justere uret eller forlenge programmet.' },
+    { id: 'vakt-uke1', name: 'Sprinkler-vakt uke 20 (14.–20. mai)', persons: 1, hours: 1, notes: 'Sett opp Gardena sprinkler + vanningsur første dagen (20–30 min). Sjekk innom 2–3 ganger i uka at det fortsatt funker. Starter dagen etter plenen er lagt.' },
+    { id: 'vakt-uke2', name: 'Backup sprinkler-vakt uke 21 (21.–27. mai)', persons: 1, hours: 1, notes: 'Aktiveres kun hvis uke 20 har vært tørr. Justere uret eller forlenge programmet.' },
   ],
 };
 
-const TOTAL_HOUR_BUDGET = 75;
+const TOTAL_HOUR_BUDGET = 109;
 const HOURLY_RATE = 650;
 const SECTIONS = 12;
 
@@ -766,21 +795,37 @@ function totalHoursPerTask(t) {
   return t.persons * t.hours;
 }
 
+function normalizeSignups(raw) {
+  // Backward-compat: gammelt format var array av tall, nytt er array av {seksjon, status}
+  if (!Array.isArray(raw)) return [];
+  return raw.map(x => typeof x === 'object' ? x : { seksjon: x, status: 'påmeldt' });
+}
+
 function renderTasks() {
   for (const [groupKey, list] of Object.entries(TASKS)) {
     const container = document.getElementById('tasks-' + groupKey);
     if (!container) continue;
     container.innerHTML = '';
     for (const t of list) {
-      const signups = (allSignups[t.id] || []).slice().sort((a,b) => a-b);
+      const signups = normalizeSignups(allSignups[t.id]).slice().sort((a,b) => a.seksjon - b.seksjon);
+      const completed = signups.filter(s => s.status === 'fullført');
+      const pending = signups.filter(s => s.status === 'påmeldt');
+      const noShow = signups.filter(s => s.status === 'ikke møtt');
       const checked = mySelections.has(t.id);
       const li = document.createElement('li');
-      li.className = 'task' + (checked ? ' checked' : '') + (currentSection ? '' : ' disabled');
+      li.className = 'task' + (checked ? ' checked' : '') + (currentSection ? '' : ' disabled') + (completed.length > 0 ? ' done' : '');
       const personsLabel = t.persons + ' person' + (t.persons > 1 ? 'er' : '');
       const totalHours = totalHoursPerTask(t);
-      const signupHTML = signups.length === 0
-        ? `<span class="empty">Ingen påmeldt</span>`
-        : `<div class="count"><b>${signups.length}</b>seksjon${signups.length > 1 ? 'er' : ''}</div><div class="who">${signups.join(' · ')}</div>`;
+      let signupHTML;
+      if (signups.length === 0) {
+        signupHTML = `<span class="empty">Ingen påmeldt</span>`;
+      } else {
+        const parts = [];
+        if (completed.length) parts.push(`<div class="count done"><b>✓ ${completed.length}</b>fullført</div><div class="who">${completed.map(s=>s.seksjon).join(' · ')}</div>`);
+        if (pending.length) parts.push(`<div class="count"><b>${pending.length}</b>påmeldt</div><div class="who">${pending.map(s=>s.seksjon).join(' · ')}</div>`);
+        if (noShow.length) parts.push(`<div class="count noshow"><b>✕ ${noShow.length}</b>ikke møtt</div><div class="who">${noShow.map(s=>s.seksjon).join(' · ')}</div>`);
+        signupHTML = parts.join('<div style="height:6px"></div>');
+      }
       li.innerHTML = `
         <span class="check"></span>
         <input type="checkbox" ${checked ? 'checked' : ''}>
@@ -812,22 +857,25 @@ function renderTasks() {
 function updateBudgetCards() {
   let covered = 0;
   const allTasks = Object.values(TASKS).flat();
-  const signedUpTaskIds = new Set(Object.keys(allSignups).filter(id => (allSignups[id] || []).length > 0));
   for (const t of allTasks) {
-    if (signedUpTaskIds.has(t.id)) covered += totalHoursPerTask(t);
+    const signups = normalizeSignups(allSignups[t.id]);
+    const active = signups.filter(s => s.status !== 'ikke møtt');
+    if (active.length > 0) covered += totalHoursPerTask(t);
   }
   const rest = Math.max(0, TOTAL_HOUR_BUDGET - covered);
   const restCost = rest * HOURLY_RATE;
-  const pct = Math.round((covered / TOTAL_HOUR_BUDGET) * 100);
+  const savedCost = covered * HOURLY_RATE;
 
-  document.getElementById('coverage-hours').textContent = covered + ' t';
-  document.getElementById('coverage-pct').textContent = pct + ' % av 75 t plukket';
+  document.getElementById('coverage-amount').textContent = savedCost.toLocaleString('nb-NO');
+  document.getElementById('coverage-pct').textContent = covered + ' t påmeldt av ' + TOTAL_HOUR_BUDGET + ' t totalt';
   document.getElementById('rest-amount').textContent = restCost.toLocaleString('nb-NO');
-  document.getElementById('rest-hours').textContent = rest + ' t må kjøpes inn';
+  document.getElementById('rest-hours').textContent = rest + ' t mangler';
 
   const seksjonerMedPaameldelse = new Set();
   for (const list of Object.values(allSignups)) {
-    for (const s of list) seksjonerMedPaameldelse.add(s);
+    for (const s of normalizeSignups(list)) {
+      if (s.status !== 'ikke møtt') seksjonerMedPaameldelse.add(s.seksjon);
+    }
   }
   const ikkePaameldte = [];
   for (let i = 1; i <= SECTIONS; i++) {
@@ -855,11 +903,11 @@ function updateSubmitBar() {
     .map(id => taskById(id))
     .filter(Boolean)
     .reduce((sum, t) => sum + totalHoursPerTask(t), 0);
-  const myRefund = myHours * HOURLY_RATE;
+  const mySaving = myHours * HOURLY_RATE;
   if (mySelections.size === 0) {
-    summary.innerHTML = `<span class="seksjon-tag">Seksjon ${currentSection}</span>Hak av oppgavene du tar ansvar for.`;
+    summary.innerHTML = `<span class="seksjon-tag">Seksjon ${currentSection}</span>Hak av oppgavene dere tar ansvar for.`;
   } else {
-    summary.innerHTML = `<span class="seksjon-tag">Seksjon ${currentSection}</span>${mySelections.size} oppgave${mySelections.size === 1 ? '' : 'r'} valgt — <em>~${myHours} t arbeid</em>, refusjon <b>${myRefund.toLocaleString('nb-NO')} kr</b>.`;
+    summary.innerHTML = `<span class="seksjon-tag">Seksjon ${currentSection}</span>${mySelections.size} oppgave${mySelections.size === 1 ? '' : 'r'} valgt — <em>~${myHours} t arbeid</em>, sparer sameiet <b>${mySaving.toLocaleString('nb-NO')} kr</b>.`;
   }
   btn.disabled = false;
 }
@@ -931,7 +979,8 @@ function onSectionChange(e) {
   if (currentSection) {
     const seksjonNr = parseInt(currentSection, 10);
     for (const [taskId, list] of Object.entries(allSignups)) {
-      if ((list || []).includes(seksjonNr)) mySelections.add(taskId);
+      const found = normalizeSignups(list).find(s => s.seksjon === seksjonNr && s.status === 'påmeldt');
+      if (found) mySelections.add(taskId);
     }
   }
   renderTasks();
