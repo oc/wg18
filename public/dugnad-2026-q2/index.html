@@ -621,11 +621,11 @@
   <section class="block" id="budget">
     <div class="block-head">
       <h2>Budsjett &amp; <em>modell</em></h2>
-      <span class="meta">12 seksjoner · 107 t arbeid</span>
+      <span class="meta">12 seksjoner · 108 t arbeid</span>
     </div>
     <p class="block-intro">
       Materialene koster det de koster — og må uansett dekkes via felleskostnadene.
-      Det <em>store potensialet</em> er arbeidet: 107 timer som ellers må kjøpes
+      Det <em>store potensialet</em> er arbeidet: 108 timer som ellers må kjøpes
       inn til 650 kr/t. Hver time fylt på dugnaden er <em>650 kr spart</em> for
       sameiet, og blir dokumentert i regnskapet før neste felleskostnads-justering.
     </p>
@@ -667,18 +667,18 @@
         </div>
         <div class="stat">
           <div class="label">Arbeidsverdi · potensiell besparelse</div>
-          <div class="value"><em>69 550</em></div>
-          <div class="sub">107 t × 650 kr — kjøpes inn hvis ingen tar det</div>
+          <div class="value"><em>70 200</em></div>
+          <div class="sub">108 t × 650 kr — kjøpes inn hvis ingen tar det</div>
         </div>
         <div class="stat">
           <div class="label">Spart så langt</div>
           <div class="value good"><em id="coverage-amount">0</em></div>
-          <div class="sub" id="coverage-pct">0 t påmeldt av 107 t totalt</div>
+          <div class="sub" id="coverage-pct">0 t påmeldt av 108 t totalt</div>
         </div>
         <div class="stat">
           <div class="label">Må kjøpes inn eksternt</div>
-          <div class="value warn"><em id="rest-amount">69 550</em></div>
-          <div class="sub" id="rest-hours">107 t mangler</div>
+          <div class="value warn"><em id="rest-amount">70 200</em></div>
+          <div class="sub" id="rest-hours">108 t mangler</div>
         </div>
       </div>
     </div>
@@ -692,7 +692,7 @@
       <ul>
         <li>Vedlikeholdsarbeidet er <em>fellesskapets</em> arbeid og dekkes ellers av felleskostnadene fordelt etter <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">eierseksjonsloven §29</a> og <a href="https://lovdata.no/nav/lov/2017-06-16-65/kapV/%C2%A729" target="_blank" rel="noopener">§29 annet ledd</a>.</li>
         <li>Deltakelse på dugnaden er <em>frivillig</em>. Hver utført dugnadstime sparer sameiet 650 kr i ekstern arbeidskraft.</li>
-        <li>Total potensiell besparelse: <strong>69 550 kr</strong> ved full oppslutning. Sparing dokumenteres i regnskapet og brukes som grunnlag for å forklare neste felleskostnads-justering.</li>
+        <li>Total potensiell besparelse: <strong>70 200 kr</strong> ved full oppslutning. Sparing dokumenteres i regnskapet og brukes som grunnlag for å forklare neste felleskostnads-justering.</li>
         <li>Ingen individuell refusjon eller pott-fordeling i år — modellen er <em>kollektiv</em>: arbeid utført av en, kommer alle til gode gjennom felleskostnadene.</li>
         <li>Påmelding er en intensjonserklæring. Styret bekrefter fullført arbeid i etterkant og fører inn faktiske timer.</li>
       </ul>
@@ -751,7 +751,7 @@
   <section class="block">
     <div class="block-head">
       <h2>Dag 2 · <em>Onsdag</em></h2>
-      <span class="meta">13. mai · 17–21 · ~19 t</span>
+      <span class="meta">13. mai · 17–21 · ~20 t</span>
     </div>
     <p class="block-intro">
       Tørt og pent. <em>Plenleveransen kommer tidlig om morgenen</em> — vi
@@ -869,7 +869,7 @@ const TASKS = {
   ],
   dag1: [
     { id: 'd1-arbeidsleder', name: 'Arbeidsleder — dag 1', persons: 1, hours: 1, notes: 'Møte tidlig. Registrere oppmøte per seksjon. Fordele oppgaver. Føre status: påstartet / gjennomført / trenger mer oppfølging. Dokumentere i Sheet ved dagsslutt.' },
-    { id: 'd1-soppel', name: 'Spyle søppelbeholdere (2× 400 L + 1× 200 L)', persons: 1, hours: 1, notes: 'Tre store beholdere — bruk høytrykksspyler.' },
+    { id: 'd1-soppel', name: 'Vaske + spyle papirsøppelbeholder', persons: 1, hours: 1, notes: 'Beholderen er tom (hentet mandag morgen — sjekk oslo.kommune.no/avfall-og-gjenvinning/nar-hentes-avfallet/). Inkluderer varsling: legg ut beskjed til beboerne i forveien om at papirsøppel ikke skal kastes der før etter tirsdag.' },
     { id: 'd1-vaske-bakgard', name: 'Høytrykksspyle nederste del av vegger i bakgård', persons: 2, hours: 2, notes: 'Spyle vekk skitt og alger fra nederste del av bakgårdsveggen. Vurder veggmateriale (puss, mur, panel) før trykk velges.' },
     { id: 'd1-vaske-stein', name: 'Vaske gulv og steiner i fellesareal', persons: 2, hours: 2, notes: '' },
     { id: 'd1-ugress', name: 'Ugressluking i bed', persons: 2, hours: 1.5, notes: '' },
@@ -877,6 +877,7 @@ const TASKS = {
   ],
   dag2: [
     { id: 'd2-arbeidsleder', name: 'Arbeidsleder — dag 2', persons: 1, hours: 1, notes: 'Registrere oppmøte. Koordinere plenlegging og maling parallelt. Føre status: påstartet / gjennomført / trenger mer oppfølging. Dokumentere ferdigstilte oppgaver i Sheet ved dagsslutt.' },
+    { id: 'd2-soppel', name: 'Vaske + spyle restsøppelbeholder', persons: 1, hours: 1, notes: 'Beholderen er tom (hentet onsdag morgen — sjekk oslo.kommune.no/avfall-og-gjenvinning/nar-hentes-avfallet/). Inkluderer varsling: legg ut beskjed til beboerne om at restsøppel ikke skal kastes der før onsdag kveld.' },
     { id: 'd2-plen', name: 'Legge ferdigplen + NPK-gjødsel + Hozelock vannspreder', persons: 2, hours: 2.5, notes: 'Forutsetter at spa-opp og kalking er ferdig. Strø Helgjødsel NPK 10-1-7 før plen, legg ferdigplen 15 kvm, skjære kanter, sett opp Hozelock vannspreder + Clas Ohlson vanningsur, vann grundig. Plen MÅ legges innen 24 t etter henting.' },
     { id: 'd2-male-bod', name: 'Male bod', persons: 2, hours: 3.5, notes: 'Forutsetter tørr og forberedt bod fra forberedelses-runden.' },
     { id: 'd2-kjokken', name: 'Kjøkkenansvarlig — vafler, kjeks, kaffe', persons: 1, hours: 4, notes: 'Kjøper kjeks, lager vafler (eller noe lignende), brygger kaffe og holder kjøkkenet i orden hele dagen.' },
@@ -892,7 +893,7 @@ const TASKS = {
   ],
 };
 
-const TOTAL_HOUR_BUDGET = 107;
+const TOTAL_HOUR_BUDGET = 108;
 const HOURLY_RATE = 650;
 const SECTIONS = 12;
 
