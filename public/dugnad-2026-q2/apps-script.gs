@@ -1,47 +1,32 @@
-// Google Apps Script for Dugnad Q2 2026 påmeldinger
+// Google Apps Script for Dugnad Q2 2026
 // ====================================================
-// Oppsett:
-// 1. Opprett et Google Sheet, navn det "Dugnad 2026 Q2 påmeldinger"
-// 2. Opprett ett ark med navn "signups" og kolonneoverskrifter:
-//      A: timestamp   B: seksjon   C: oppgave_id   D: status   E: notat
-// 3. Verktøy → Apps Script (eller script.google.com → Nytt prosjekt)
-// 4. Lim inn dette skriptet, lagre
-// 5. Oppdater SHEET_ID under (finnes i URL-en til Sheet-et)
-// 6. Distribuer → Ny distribusjon → Type: Web-app
-//      Utfør som: Meg
-//      Hvem har tilgang: Alle (eller "Alle med Google-konto")
-// 7. Kopier Web-app URL og lim inn i index.html (variabel APPS_SCRIPT_URL)
+// Sheet-oppsett:
+//   Tab "signups":     A timestamp · B seksjon · C oppgave_id · D status · E notat
+//   Tab "suggestions": A timestamp · B seksjon · C beskrivelse · D timer · E budsjett
 //
-// STATUS-VERDIER for kolonne D:
+// STATUS-VERDIER for signups kolonne D:
 //   "påmeldt"  — standard etter signup
 //   "fullført" — styret bekrefter utført arbeid
 //   "ikke møtt" — styret markerer manglende oppmøte
-//
-// STYRE-WORKFLOW (etter dugnaden):
-//   Åpne Sheet-et direkte og rediger:
-//   - Endre status fra "påmeldt" til "fullført" der jobben er gjort
-//   - Endre seksjon-kolonnen hvis en annen seksjon faktisk gjorde jobben
-//   - Sett "ikke møtt" hvis ingen utførte oppgaven
-//   - Skriv eventuelle notater i kolonne E
-//
-//   Sheet-et er den autoritative kilden — siden henter status derfra.
 
 const SHEET_ID = 'PASTE_YOUR_GOOGLE_SHEET_ID_HERE';
-const SHEET_NAME = 'signups';
+const SHEET_SIGNUPS = 'signups';
+const SHEET_SUGGESTIONS = 'suggestions';
 
-function _sheet() {
-  return SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
+function _sheet(name) {
+  return SpreadsheetApp.openById(SHEET_ID).getSheetByName(name);
 }
 
-// GET: returner alle påmeldinger gruppert per oppgave, med status
-// Format: { signups: { oppgave_id: [{seksjon, status}, ...] } }
+// GET: returner alle påmeldinger og forslag
 function doGet(e) {
-  const sheet = _sheet();
-  const data = sheet.getDataRange().getValues();
-  const signups = {};
+  const signupSheet = _sheet(SHEET_SIGNUPS);
+  const sugSheet = _sheet(SHEET_SUGGESTIONS);
 
-  for (let i = 1; i < data.length; i++) {
-    const [, seksjon, oppgaveId, status] = data[i];
+  // Signups: { oppgave_id: [{seksjon, status}, ...] }
+  const signups = {};
+  const sData = signupSheet.getDataRange().getValues();
+  for (let i = 1; i < sData.length; i++) {
+    const [, seksjon, oppgaveId, status] = sData[i];
     if (!oppgaveId) continue;
     if (!signups[oppgaveId]) signups[oppgaveId] = [];
     signups[oppgaveId].push({
@@ -50,15 +35,42 @@ function doGet(e) {
     });
   }
 
-  return _json({ signups });
+  // Suggestions: [{seksjon, beskrivelse, timer, budsjett, timestamp}, ...]
+  const suggestions = [];
+  if (sugSheet) {
+    const gData = sugSheet.getDataRange().getValues();
+    for (let i = 1; i < gData.length; i++) {
+      const [timestamp, seksjon, beskrivelse, timer, budsjett] = gData[i];
+      if (!beskrivelse) continue;
+      suggestions.push({
+        timestamp: timestamp,
+        seksjon: parseInt(seksjon, 10),
+        beskrivelse: String(beskrivelse),
+        timer: timer,
+        budsjett: budsjett,
+      });
+    }
+  }
+
+  return _json({ signups, suggestions });
 }
 
-// POST: erstatt påmeldinger for én seksjon
-// Beholder rader som er markert "fullført" eller "ikke møtt" av styret.
-// Body: { "seksjon": 1, "oppgaver": ["d1-rive-plen", ...] }
+// POST: signup eller suggestion
+//   Signup body:     { seksjon: 1, oppgaver: ["d1-rive-plen", ...] }
+//   Suggestion body: { type: "suggestion", seksjon: 1, beskrivelse: "...",
+//                      timer: "4", budsjett: "500" }
 function doPost(e) {
-  const sheet = _sheet();
   const body = JSON.parse(e.postData.contents);
+
+  if (body.type === 'suggestion') {
+    return _handleSuggestion(body);
+  }
+
+  return _handleSignup(body);
+}
+
+function _handleSignup(body) {
+  const sheet = _sheet(SHEET_SIGNUPS);
   const seksjon = parseInt(body.seksjon, 10);
   const oppgaver = body.oppgaver || [];
 
@@ -66,7 +78,7 @@ function doPost(e) {
     return _json({ error: 'Ugyldig seksjon' });
   }
 
-  // Slett kun rader med status "påmeldt" — ikke rør styre-bekreftet arbeid
+  // Slett kun rader med status "påmeldt" — bevar styre-bekreftet arbeid
   const data = sheet.getDataRange().getValues();
   for (let i = data.length - 1; i >= 1; i--) {
     const status = data[i][3] || 'påmeldt';
@@ -82,6 +94,29 @@ function doPost(e) {
   }
 
   return _json({ ok: true, count: oppgaver.length });
+}
+
+function _handleSuggestion(body) {
+  const sheet = _sheet(SHEET_SUGGESTIONS);
+  if (!sheet) {
+    return _json({ error: 'suggestions-arket finnes ikke' });
+  }
+  const seksjon = parseInt(body.seksjon, 10);
+  const beskrivelse = String(body.beskrivelse || '').trim();
+
+  if (!beskrivelse) {
+    return _json({ error: 'Mangler beskrivelse' });
+  }
+
+  sheet.appendRow([
+    new Date(),
+    seksjon || '',
+    beskrivelse,
+    body.timer || '',
+    body.budsjett || '',
+  ]);
+
+  return _json({ ok: true });
 }
 
 function _json(obj) {

@@ -277,6 +277,82 @@
   }
   .task .signups .count.done b{color:var(--moss)}
   .task .signups .count.noshow b{color:var(--rust);text-decoration:line-through}
+
+  /* suggestion form */
+  .suggestion-form{
+    background:var(--bone-card);
+    border:1px solid var(--ink);
+    padding:22px 24px;
+    margin-top:18px;
+    box-shadow: 6px 8px 0 -1px rgba(26,20,17,.08);
+  }
+  .suggestion-form .field{
+    display:flex;flex-direction:column;
+    border-bottom:1px solid var(--ink);
+    padding:8px 0 6px;
+    margin-bottom:14px;
+  }
+  .suggestion-form .field label{
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .suggestion-form .field input,
+  .suggestion-form .field textarea{
+    background:transparent;border:none;outline:none;
+    font-family:"Fraunces",serif;font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:18px;color:var(--ink);
+    padding:4px 0;resize:vertical;
+    width:100%;
+  }
+  .suggestion-form .field textarea{min-height:60px;line-height:1.4}
+  .suggestion-form .field input::placeholder,
+  .suggestion-form .field textarea::placeholder{color:rgba(26,20,17,.3);font-style:italic}
+  .suggestion-form .row{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;
+  }
+  @media (max-width:540px){.suggestion-form .row{grid-template-columns:1fr}}
+  .suggestion-form .actions{
+    display:flex;justify-content:flex-end;
+    margin-top:6px;
+  }
+  .suggestion-form button{
+    background:var(--ink);color:var(--bone);
+    border:1px solid var(--ink);
+    padding:14px 22px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    cursor:pointer;
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .suggestion-form button:hover:not(:disabled){
+    background:var(--rust);border-color:var(--rust);
+    transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);
+  }
+  .suggestion-form button:disabled{
+    background:var(--bone-deep);color:var(--ink-soft);
+    border-color:var(--ink-soft);cursor:not-allowed;
+  }
+  .suggestion-list{margin-top:24px;display:flex;flex-direction:column;gap:12px}
+  .suggestion-item{
+    border-left:3px solid var(--rust);
+    padding:12px 16px;
+    background:var(--bone-deep);
+  }
+  .suggestion-item .text{
+    font-weight:380;font-variation-settings:"opsz" 14;
+    font-size:16px;color:var(--ink);line-height:1.4;
+  }
+  .suggestion-item .meta{
+    margin-top:6px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;flex-wrap:wrap;gap:14px;
+  }
+  .suggestion-item .meta .sep{opacity:.4}
   .picker .label{
     font-family:"JetBrains Mono",monospace;
     font-size:10px;letter-spacing:.22em;text-transform:uppercase;
@@ -709,6 +785,41 @@
     <ul class="tasks" id="tasks-vakt"></ul>
   </section>
 
+  <!-- SUGGESTIONS -->
+  <section class="block">
+    <div class="block-head">
+      <h2>Foreslå <em>ny oppgave</em></h2>
+      <span class="meta">Frivillig · til styret</span>
+    </div>
+    <p class="block-intro">
+      Mangler det noe på listen? Skriv et forslag med <em>ca timer</em> og
+      <em>ca budsjett</em>. Forslagene går til styret som vurderer å legge dem
+      inn i oppgavelisten.
+    </p>
+
+    <div class="suggestion-form">
+      <div class="field">
+        <label for="sug-text">Beskriv oppgaven</label>
+        <textarea id="sug-text" placeholder="F.eks. fjerne mose fra fellesgang, male sykkelstativet, …" rows="3"></textarea>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="sug-hours">Ca arbeidstimer</label>
+          <input id="sug-hours" type="text" inputmode="decimal" placeholder="f.eks. 4">
+        </div>
+        <div class="field">
+          <label for="sug-budget">Ca materialbudsjett (kr)</label>
+          <input id="sug-budget" type="text" inputmode="numeric" placeholder="f.eks. 500">
+        </div>
+      </div>
+      <div class="actions">
+        <button id="sug-submit" disabled>Send forslag</button>
+      </div>
+    </div>
+
+    <div class="suggestion-list" id="suggestion-list"></div>
+  </section>
+
   <!-- SUBMIT -->
   <section class="submit">
     <div class="head">
@@ -919,6 +1030,8 @@ function showStatus(msg, ok) {
   if (ok) setTimeout(() => { el.className = 'status'; }, 4000);
 }
 
+let allSuggestions = [];
+
 async function loadSignups() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('PASTE_')) {
     console.warn('Apps Script URL er ikke konfigurert — påmeldinger lagres ikke.');
@@ -928,9 +1041,93 @@ async function loadSignups() {
     const res = await fetch(APPS_SCRIPT_URL);
     const data = await res.json();
     allSignups = data.signups || {};
+    allSuggestions = data.suggestions || [];
   } catch (err) {
     console.error('Kunne ikke laste påmeldinger:', err);
   }
+}
+
+function renderSuggestions() {
+  const container = document.getElementById('suggestion-list');
+  if (!container) return;
+  if (!allSuggestions.length) {
+    container.innerHTML = '';
+    return;
+  }
+  container.innerHTML = allSuggestions.map(s => {
+    const parts = [];
+    if (s.seksjon) parts.push(`Seksjon ${s.seksjon}`);
+    if (s.timer) parts.push(`~${s.timer} t`);
+    if (s.budsjett) parts.push(`~${parseInt(s.budsjett, 10).toLocaleString('nb-NO')} kr`);
+    return `
+      <div class="suggestion-item">
+        <div class="text">${s.beskrivelse.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</div>
+        <div class="meta">${parts.map((p,i) => i === 0 ? p : `<span class="sep">·</span>${p}`).join(' ')}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function submitSuggestion() {
+  const btn = document.getElementById('sug-submit');
+  const text = document.getElementById('sug-text').value.trim();
+  const hours = document.getElementById('sug-hours').value.trim();
+  const budget = document.getElementById('sug-budget').value.trim();
+
+  if (!text) {
+    showStatus('Skriv en beskrivelse av oppgaven.', false);
+    return;
+  }
+  if (!currentSection) {
+    showStatus('Velg seksjon øverst først.', false);
+    return;
+  }
+
+  btn.disabled = true;
+  const orig = btn.textContent;
+  btn.textContent = 'Sender…';
+
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('PASTE_')) {
+    showStatus('Apps Script URL er ikke konfigurert.', false);
+    btn.disabled = false;
+    btn.textContent = orig;
+    return;
+  }
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        type: 'suggestion',
+        seksjon: parseInt(currentSection, 10),
+        beskrivelse: text,
+        timer: hours,
+        budsjett: budget,
+      }),
+    });
+    document.getElementById('sug-text').value = '';
+    document.getElementById('sug-hours').value = '';
+    document.getElementById('sug-budget').value = '';
+    showStatus(`Forslag sendt til styret.`, true);
+    setTimeout(async () => {
+      await loadSignups();
+      renderSuggestions();
+    }, 800);
+  } catch (err) {
+    console.error(err);
+    showStatus('Kunne ikke sende forslag.', false);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = orig;
+  }
+}
+
+function updateSuggestionButtonState() {
+  const btn = document.getElementById('sug-submit');
+  const text = document.getElementById('sug-text').value.trim();
+  btn.disabled = !currentSection || !text;
 }
 
 async function saveSelections() {
@@ -987,14 +1184,21 @@ function onSectionChange(e) {
   updateSubmitBar();
 }
 
-document.getElementById('seksjon-select').addEventListener('change', onSectionChange);
+document.getElementById('seksjon-select').addEventListener('change', (e) => {
+  onSectionChange(e);
+  updateSuggestionButtonState();
+});
 document.getElementById('submit-btn').addEventListener('click', saveSelections);
+document.getElementById('sug-text').addEventListener('input', updateSuggestionButtonState);
+document.getElementById('sug-submit').addEventListener('click', submitSuggestion);
 
 (async () => {
   await loadSignups();
   renderTasks();
+  renderSuggestions();
   updateBudgetCards();
   updateSubmitBar();
+  updateSuggestionButtonState();
 })();
 </script>
 </body>
