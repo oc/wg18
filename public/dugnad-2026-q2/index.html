@@ -446,37 +446,39 @@
   }
 
   .task .signups{
-    text-align:right;
     flex-shrink:0;
+    display:flex;flex-wrap:wrap;gap:4px;
+    justify-content:flex-end;align-items:flex-start;
+    max-width:240px;
   }
-  .task .signups .count{
+  .task .signups .badge{
     font-family:"JetBrains Mono",monospace;
-    font-size:11px;letter-spacing:.14em;
-    color:var(--ink-soft);
-    text-transform:uppercase;
-    white-space:nowrap;
-  }
-  .task .signups .count b{
-    font-family:"Fraunces",serif;
-    font-style:italic;font-weight:500;
-    font-variation-settings:"opsz" 14;
-    font-size:18px;color:var(--rust);
-    letter-spacing:0;
-    margin-right:4px;
-  }
-  .task .signups .who{
-    margin-top:6px;
-    font-family:"JetBrains Mono",monospace;
-    font-size:10px;letter-spacing:.12em;
+    font-size:10px;letter-spacing:.08em;
+    padding:3px 7px;
+    border:1px solid var(--ink);
+    background:var(--bone);
     color:var(--ink);
+    white-space:nowrap;
+    line-height:1.2;
+  }
+  .task .signups .badge.done{
+    background:var(--moss);color:#fff;border-color:var(--moss);
+  }
+  .task .signups .badge.done::after{content:" ✓"}
+  .task .signups .badge.noshow{
+    background:var(--rust);color:#fff;border-color:var(--rust);
+    text-decoration:line-through;
+  }
+  .task .signups .badge.current{
+    background:var(--ink);color:var(--bone);border-color:var(--ink);
+    font-weight:500;
   }
   .task .signups .empty{
     font-style:italic;
-    font-family:"Fraunces",serif;
+    font-family:"Fraunces",serif;font-weight:380;
+    font-variation-settings:"opsz" 14;
     font-size:13px;
     color:var(--ink-soft);
-    text-transform:none;
-    letter-spacing:0;
   }
 
   @media (max-width:640px){
@@ -919,23 +921,24 @@ function renderTasks() {
     container.innerHTML = '';
     for (const t of list) {
       const signups = normalizeSignups(allSignups[t.id]).slice().sort((a,b) => a.seksjon - b.seksjon);
-      const completed = signups.filter(s => s.status === 'fullført');
-      const pending = signups.filter(s => s.status === 'påmeldt');
-      const noShow = signups.filter(s => s.status === 'ikke møtt');
+      const hasFullfort = signups.some(s => s.status === 'fullført');
       const checked = mySelections.has(t.id);
+      const currentSeksjonNr = currentSection ? parseInt(currentSection, 10) : null;
       const li = document.createElement('li');
-      li.className = 'task' + (checked ? ' checked' : '') + (currentSection ? '' : ' disabled') + (completed.length > 0 ? ' done' : '');
+      li.className = 'task' + (checked ? ' checked' : '') + (currentSection ? '' : ' disabled') + (hasFullfort ? ' done' : '');
       const personsLabel = t.persons + ' person' + (t.persons > 1 ? 'er' : '');
       const totalHours = totalHoursPerTask(t);
       let signupHTML;
       if (signups.length === 0) {
         signupHTML = `<span class="empty">Ingen påmeldt</span>`;
       } else {
-        const parts = [];
-        if (completed.length) parts.push(`<div class="count done"><b>✓ ${completed.length}</b>fullført</div><div class="who">${completed.map(s=>s.seksjon).join(' · ')}</div>`);
-        if (pending.length) parts.push(`<div class="count"><b>${pending.length}</b>påmeldt</div><div class="who">${pending.map(s=>s.seksjon).join(' · ')}</div>`);
-        if (noShow.length) parts.push(`<div class="count noshow"><b>✕ ${noShow.length}</b>ikke møtt</div><div class="who">${noShow.map(s=>s.seksjon).join(' · ')}</div>`);
-        signupHTML = parts.join('<div style="height:6px"></div>');
+        signupHTML = signups.map(s => {
+          let cls = 'badge';
+          if (s.status === 'fullført') cls += ' done';
+          else if (s.status === 'ikke møtt') cls += ' noshow';
+          if (s.seksjon === currentSeksjonNr) cls += ' current';
+          return `<span class="${cls}">Snr ${s.seksjon}</span>`;
+        }).join('');
       }
       li.innerHTML = `
         <span class="check"></span>
