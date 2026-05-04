@@ -823,14 +823,14 @@
   <!-- SUBMIT -->
   <section class="submit">
     <div class="head">
-      Lagre<br><em>påmelding.</em>
-      <small>Kan endres frem til 5. mai</small>
+      Auto-<br><em>lagres.</em>
+      <small>Endringer lagres automatisk · kan endres frem til 5. mai</small>
     </div>
 
     <div>
       <p class="summary" id="submit-summary">Velg seksjon øverst for å starte påmelding.</p>
       <button class="send" id="submit-btn" disabled>
-        Send inn
+        Lagre nå
         <svg width="22" height="10" viewBox="0 0 22 10" fill="none">
           <path d="M0 5 H20 M15 1 L20 5 L15 9" stroke="currentColor" stroke-width="1.4" fill="none"/>
         </svg>
@@ -959,6 +959,7 @@ function renderTasks() {
         else mySelections.add(t.id);
         renderTasks();
         updateSubmitBar();
+        scheduleAutoSave();
       });
       container.appendChild(li);
     }
@@ -1031,6 +1032,8 @@ function showStatus(msg, ok) {
 }
 
 let allSuggestions = [];
+let autoSaveTimer = null;
+const AUTO_SAVE_DELAY = 800;
 
 async function loadSignups() {
   if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('PASTE_')) {
@@ -1170,7 +1173,43 @@ async function saveSelections() {
   }
 }
 
+function scheduleAutoSave() {
+  if (!currentSection) return;
+  clearTimeout(autoSaveTimer);
+  showStatus('Endring registrert — lagrer om et øyeblikk…', true);
+  autoSaveTimer = setTimeout(() => autoSave(), AUTO_SAVE_DELAY);
+}
+
+async function autoSave() {
+  if (!currentSection) return;
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('PASTE_')) {
+    showStatus('Apps Script URL er ikke konfigurert.', false);
+    return;
+  }
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        seksjon: parseInt(currentSection, 10),
+        oppgaver: [...mySelections],
+      }),
+    });
+    showStatus(`Lagret automatisk · seksjon ${currentSection}`, true);
+    setTimeout(async () => {
+      await loadSignups();
+      renderTasks();
+      updateBudgetCards();
+    }, 400);
+  } catch (err) {
+    console.error(err);
+    showStatus('Auto-lagring feilet — trykk Lagre nå manuelt.', false);
+  }
+}
+
 function onSectionChange(e) {
+  clearTimeout(autoSaveTimer);
   currentSection = e.target.value;
   mySelections = new Set();
   if (currentSection) {
