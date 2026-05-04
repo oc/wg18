@@ -706,18 +706,6 @@
     </div>
     <select id="seksjon-select" aria-label="Velg seksjon">
       <option value="">— Velg seksjon —</option>
-      <option value="1">Seksjon 1</option>
-      <option value="2">Seksjon 2</option>
-      <option value="3">Seksjon 3</option>
-      <option value="4">Seksjon 4</option>
-      <option value="5">Seksjon 5</option>
-      <option value="6">Seksjon 6</option>
-      <option value="7">Seksjon 7</option>
-      <option value="8">Seksjon 8</option>
-      <option value="9">Seksjon 9</option>
-      <option value="10">Seksjon 10</option>
-      <option value="11">Seksjon 11</option>
-      <option value="12">Seksjon 12</option>
     </select>
   </div>
 
@@ -894,6 +882,27 @@ const TASKS = {
 };
 
 const TOTAL_HOUR_BUDGET = 108;
+
+const SECTION_NAMES = {
+  6: 'Gomes / Linnerud',
+  8: 'Meyer',
+  9: 'Evensen-Rynning / Rynning',
+};
+
+function sectionLabel(nr) {
+  const name = SECTION_NAMES[nr];
+  return name ? `Seksjon ${nr} — ${name}` : `Seksjon ${nr}`;
+}
+
+(function populateSectionPicker() {
+  const select = document.getElementById('seksjon-select');
+  for (let i = 1; i <= 12; i++) {
+    const opt = document.createElement('option');
+    opt.value = String(i);
+    opt.textContent = sectionLabel(i);
+    select.appendChild(opt);
+  }
+})();
 const HOURLY_RATE = 650;
 const SECTIONS = 12;
 
