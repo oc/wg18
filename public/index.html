@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sameiet Welhavensgate 18 · wg18-api</title>
+<meta name="description" content="Sameiet Welhavensgate 18 og wg18-api, styrets interne verktøy for forvaltning av sameiet." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bone:      #F2ECDE;
+    --ink:       #1A1411;
+    --ink-soft:  #5C4F45;
+    --rust:      #B34118;
+    --rule:      rgba(26,20,17,.15);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bone);color:var(--ink);-webkit-font-smoothing:antialiased}
+  body{font-family:"Fraunces",Georgia,serif;min-height:100vh}
+
+  main{max-width:760px;margin:0 auto;padding:72px 56px 140px}
+  @media (max-width:760px){main{padding:48px 24px 100px}}
+
+  .kicker{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;align-items:center;gap:14px;
+  }
+  .kicker::before{content:"";width:32px;height:1px;background:var(--ink);display:inline-block}
+
+  h1{
+    margin-top:28px;
+    font-weight:300;
+    font-variation-settings:"opsz" 144, "SOFT" 50;
+    font-size:clamp(48px, 8vw, 96px);
+    line-height:.9;
+    letter-spacing:-.035em;
+  }
+  h1 em{font-style:italic;color:var(--rust);font-weight:300}
+
+  h2{
+    margin-top:56px;
+    font-weight:400;
+    font-size:26px;
+    padding-top:20px;
+    border-top:1px solid var(--rule);
+  }
+  h2 code{font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--rust)}
+
+  p, li{
+    font-weight:380;
+    font-variation-settings:"opsz" 14;
+    font-size:17px;line-height:1.6;
+  }
+  p{margin-top:14px}
+  ul{margin-top:12px;padding-left:22px}
+  li{margin-top:6px}
+  a{color:var(--rust)}
+
+  .cta{
+    display:inline-block;margin-top:32px;
+    padding:14px 22px;
+    background:var(--ink);color:var(--bone);
+    font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+    text-decoration:none;
+  }
+  .cta:hover{background:var(--rust)}
+
+  footer{
+    margin-top:72px;padding-top:20px;border-top:1px solid var(--rule);
+    font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-soft);line-height:1.8;
+  }
+  footer a{color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<main>
+
+  <div class="kicker">Welhavens gate 18 · 0350 Oslo</div>
+  <h1>Sameiet <em>Welhavensgate 18</em></h1>
+
+  <p>Beboerinformasjon, oppslag og bookinger ligger på Vibbo.</p>
+  <a class="cta" href="https://vibbo.no/welhavensgate-18">Gå til Vibbo →</a>
+
+  <h2><code>wg18-api</code></h2>
+  <p>
+    wg18-api er styrets interne verktøy for å forvalte sameiet. Verktøyet kobler seg til sameiets
+    egen Google-konto via Google OAuth, og brukes bare av styret.
+  </p>
+  <ul>
+    <li>Leser, organiserer og besvarer sameiets e-post i Gmail.</li>
+    <li>Henter og arkiverer dokumenter i Google Drive, som tilbud, kontrakter og FDV-dokumentasjon.</li>
+    <li>Oppdaterer regneark i Google Sheets, som eierliste, dugnadspåmeldinger og registrering av korttidsutleie.</li>
+  </ul>
+  <p>
+    Verktøyet er ikke tilgjengelig for andre enn styret, og data fra Google brukes bare til sameiets drift.
+    Se <a href="/privacy-policy">personvernerklæringen</a> for detaljer.
+  </p>
+
+  <h2 lang="en">About <code>wg18-api</code></h2>
+  <p lang="en">
+    wg18-api is the internal tool the board of Sameiet Welhavensgate 18, a residential condominium in
+    Oslo, uses to manage the condominium. It connects to the condominium's own Google account through
+    Google OAuth to read, organise and respond to email in Gmail, file documents in Google Drive and
+    maintain registers in Google Sheets. It is used only by the board. Read the
+    <a href="/privacy-policy#en">privacy policy</a>.
+  </p>
+
+  <footer>
+    Sameiet Welhavensgate 18 · org.nr. 897 830 922 · Welhavens gate 18, 0350 Oslo<br>
+    <a href="mailto:styret.wg18@gmail.com">styret.wg18@gmail.com</a> ·
+    <a href="/privacy-policy">Personvern / Privacy policy</a>
+  </footer>
+
+</main>
+</body>
+</html>
